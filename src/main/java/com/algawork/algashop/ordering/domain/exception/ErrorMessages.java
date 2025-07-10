@@ -8,4 +8,5 @@ public class ErrorMessages {
     public static final String VALIDATION_ERROR_FULLNAME_IS_BLANK = "FullName cannot be blank";
 
     public static final String ERROR_CUSTOMER_ARCHIVED = "Customer is archived it cannot be changed";
+
 }
