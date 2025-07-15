@@ -16,11 +16,11 @@ public record Address(
 ) {
     @Builder(toBuilder = true)
     public Address {
-        FieldValidations.requiredNonBlank(street);
-        FieldValidations.requiredNonBlank(neighborhood);
-        FieldValidations.requiredNonBlank(number);
-        FieldValidations.requiredNonBlank(city);
-        FieldValidations.requiredNonBlank(state);
+        FieldValidations.requiresNonBlank(street);
+        FieldValidations.requiresNonBlank(neighborhood);
+        FieldValidations.requiresNonBlank(number);
+        FieldValidations.requiresNonBlank(city);
+        FieldValidations.requiresNonBlank(state);
         Objects.requireNonNull(zipCode);
     }
 }

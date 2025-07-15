@@ -9,11 +9,11 @@ public class FieldValidations {
 
     }
 
-    public static void requiredNonBlank(String value) {
-        requiredNonBlank(value, "");
+    public static void requiresNonBlank(String value) {
+        requiresNonBlank(value, "");
     }
 
-    public static void requiredNonBlank(String value, String errorMassge) {
+    public static void requiresNonBlank(String value, String errorMessage) {
         Objects.requireNonNull(value);
         if (value.isBlank()) {
             throw new IllegalArgumentException();
