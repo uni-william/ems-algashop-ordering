@@ -1,26 +1,35 @@
 package com.algawork.algashop.ordering.domain.entity;
 
-import com.algawork.algashop.ordering.domain.valueObject.Money;
-import com.algawork.algashop.ordering.domain.valueObject.ProductName;
+
+import com.algawork.algashop.ordering.domain.valueObject.Product;
+
 import com.algawork.algashop.ordering.domain.valueObject.Quantity;
 import com.algawork.algashop.ordering.domain.valueObject.id.OrderId;
-import com.algawork.algashop.ordering.domain.valueObject.id.OrderItemId;
-import com.algawork.algashop.ordering.domain.valueObject.id.ProductId;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class OrderItemTest {
 
     @Test
-    public void shouldGenerate() {
-        OrderItem.brandNew()
-                .productId(new ProductId())
-                .quantity(new Quantity(1))
-                .orderId(new OrderId())
-                .productName(new ProductName("Mouse pad"))
-                .price(new Money("100"))
+    public void shouldGenerateBrandNewOrderItem() {
+        Product product = ProductTestDataBuilder.aProduct().build();
+        Quantity quantity = new Quantity(1);
+        OrderId orderId = new OrderId();
+
+        OrderItem orderItem = OrderItem.brandNew()
+                .product(product)
+                .quantity(quantity)
+                .orderId(orderId)
                 .build();
+
+        Assertions.assertWith(orderItem,
+                o-> Assertions.assertThat(o.id()).isNotNull(),
+                o-> Assertions.assertThat(o.productId()).isEqualTo(product.id()),
+                o-> Assertions.assertThat(o.productName()).isEqualTo(product.name()),
+                o-> Assertions.assertThat(o.price()).isEqualTo(product.price()),
+                o-> Assertions.assertThat(o.quantity()).isEqualTo(quantity),
+                o-> Assertions.assertThat(o.orderId()).isEqualTo(orderId)
+        );
     }
 
 }
