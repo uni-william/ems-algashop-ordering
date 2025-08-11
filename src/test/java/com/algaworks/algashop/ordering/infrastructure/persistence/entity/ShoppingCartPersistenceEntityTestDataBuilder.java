@@ -6,44 +6,41 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Set;
 
-public class OrderPersistenceEntityTestDataBuilder {
+public class ShoppingCartPersistenceEntityTestDataBuilder {
 
-    private OrderPersistenceEntityTestDataBuilder() {
+    private ShoppingCartPersistenceEntityTestDataBuilder() {
     }
 
-    public static OrderPersistenceEntity.OrderPersistenceEntityBuilder existingOrder() {
-        return OrderPersistenceEntity.builder()
-                .id(IdGenerator.generateTSID().toLong())
+    public static ShoppingCartPersistenceEntity.ShoppingCartPersistenceEntityBuilder existingShoppingCart() {
+        return ShoppingCartPersistenceEntity.builder()
+                .id(IdGenerator.generateTimeBasedUUID())
                 .customer(CustomerPersistenceEntityTestDataBuilder.aCustomer().build())
                 .totalItems(3)
                 .totalAmount(new BigDecimal(1250))
-                .status("DRAFT")
-                .paymentMethod("CREDIT_CARD")
-                .placedAt(OffsetDateTime.now())
+                .createdAt(OffsetDateTime.now())
                 .items(Set.of(
                         existingItem().build(),
                         existingItemAlt().build()
                 ));
     }
 
-    public static OrderItemPersistenceEntity.OrderItemPersistenceEntityBuilder existingItem() {
-        return OrderItemPersistenceEntity.builder()
-                .id(IdGenerator.generateTSID().toLong())
+    public static ShoppingCartItemPersistenceEntity.ShoppingCartItemPersistenceEntityBuilder existingItem() {
+        return ShoppingCartItemPersistenceEntity.builder()
+                .id(IdGenerator.generateTimeBasedUUID())
                 .price(new BigDecimal(500))
                 .quantity(2)
                 .totalAmount(new BigDecimal(1000))
-                .productName("Notebook")
+                .name("Notebook")
                 .productId(IdGenerator.generateTimeBasedUUID());
     }
 
-    public static OrderItemPersistenceEntity.OrderItemPersistenceEntityBuilder existingItemAlt() {
-        return OrderItemPersistenceEntity.builder()
-                .id(IdGenerator.generateTSID().toLong())
+    public static ShoppingCartItemPersistenceEntity.ShoppingCartItemPersistenceEntityBuilder existingItemAlt() {
+        return ShoppingCartItemPersistenceEntity.builder()
+                .id(IdGenerator.generateTimeBasedUUID())
                 .price(new BigDecimal(250))
                 .quantity(1)
                 .totalAmount(new BigDecimal(250))
-                .productName("Mouse pad")
+                .name("Mouse pad")
                 .productId(IdGenerator.generateTimeBasedUUID());
     }
-
 }

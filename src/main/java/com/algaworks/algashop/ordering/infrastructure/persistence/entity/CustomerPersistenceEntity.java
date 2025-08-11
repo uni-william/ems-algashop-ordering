@@ -15,13 +15,14 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString(of = "id")
-@Table(name = "customer")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@Table(name = "\"customer\"")
+@AllArgsConstructor
+@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class CustomerPersistenceEntity {
-
     @Id
     @EqualsAndHashCode.Include
     private UUID id;

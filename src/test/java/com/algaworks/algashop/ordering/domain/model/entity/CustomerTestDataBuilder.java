@@ -7,6 +7,9 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 public class CustomerTestDataBuilder {
+
+    public static final CustomerId DEFAULT_CUSTOMER_ID = new CustomerId();
+
     private CustomerTestDataBuilder() {
     }
 
@@ -31,7 +34,7 @@ public class CustomerTestDataBuilder {
 
     public static Customer.ExistingCustomerBuild existingCustomer() {
         return Customer.existing()
-                .id(new CustomerId())
+                .id(DEFAULT_CUSTOMER_ID)
                 .registeredAt(OffsetDateTime.now())
                 .promotionNotificationsAllowed(true)
                 .archived(false)
@@ -78,5 +81,4 @@ public class CustomerTestDataBuilder {
                         .complement("Apt. 114")
                         .build());
     }
-
 }
