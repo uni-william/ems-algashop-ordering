@@ -1,27 +1,27 @@
 package com.algaworks.algashop.ordering.domain.model.entity;
 
-import com.algaworks.algashop.ordering.domain.model.valueObject.Money;
-import com.algaworks.algashop.ordering.domain.model.valueObject.Product;
-import com.algaworks.algashop.ordering.domain.model.valueObject.ProductName;
-import com.algaworks.algashop.ordering.domain.model.valueObject.Quantity;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.OrderId;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.OrderItemId;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.ProductId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Product;
+import com.algaworks.algashop.ordering.domain.model.valueobject.ProductName;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderItemId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.ProductId;
 import lombok.Builder;
 
 import java.util.Objects;
 
 public class OrderItem {
-
+    
     private OrderItemId id;
     private OrderId orderId;
-
+    
     private ProductId productId;
     private ProductName productName;
-
+    
     private Money price;
     private Quantity quantity;
-
+    
     private Money totalAmount;
 
     @Builder(builderClassName = "ExistingOrderItemBuilder", builderMethodName = "existing")

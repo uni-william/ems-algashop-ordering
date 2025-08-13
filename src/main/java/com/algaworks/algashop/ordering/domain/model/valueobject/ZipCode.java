@@ -1,12 +1,15 @@
-package com.algaworks.algashop.ordering.domain.model.valueObject;
+package com.algaworks.algashop.ordering.domain.model.valueobject;
 
 import java.util.Objects;
 
-public record Document(String value) {
+public record ZipCode(String value) {
 
-    public Document {
+    public ZipCode {
         Objects.requireNonNull(value);
         if (value.isBlank()) {
+            throw new IllegalArgumentException();
+        }
+        if (value.length() != 5) {
             throw new IllegalArgumentException();
         }
     }

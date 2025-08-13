@@ -1,4 +1,4 @@
-package com.algaworks.algashop.ordering.domain.model.valueObject;
+package com.algaworks.algashop.ordering.domain.model.valueobject;
 
 import lombok.Builder;
 

@@ -1,7 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.exception;
 
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.ProductId;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.ShoppingCartItemId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.ProductId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartItemId;
 
 public class ShoppingCartItemIncompatibleProductException extends DomainException {
     public ShoppingCartItemIncompatibleProductException(ShoppingCartItemId id, ProductId productId) {

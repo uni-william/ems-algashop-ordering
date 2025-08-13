@@ -9,13 +9,12 @@ import java.util.UUID;
 @Entity
 @Table(name = "order_item")
 @Data
-@ToString(of = "id")
+@ToString(of= "id")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class OrderItemPersistenceEntity {
-
     @Id
     @EqualsAndHashCode.Include
     private Long id;
@@ -33,6 +32,7 @@ public class OrderItemPersistenceEntity {
         if (getOrder() == null) {
             return null;
         }
+
         return getOrder().getId();
     }
 }

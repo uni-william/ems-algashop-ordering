@@ -1,9 +1,10 @@
-package com.algaworks.algashop.ordering.domain.model.valueObject;
+package com.algaworks.algashop.ordering.domain.model.valueobject;
 
 import com.algaworks.algashop.ordering.domain.model.validator.FieldValidations;
 import lombok.Builder;
 
 import java.util.Objects;
+
 
 public record Address(
         String street,
@@ -18,8 +19,8 @@ public record Address(
     public Address {
         FieldValidations.requiresNonBlank(street);
         FieldValidations.requiresNonBlank(neighborhood);
-        FieldValidations.requiresNonBlank(number);
         FieldValidations.requiresNonBlank(city);
+        FieldValidations.requiresNonBlank(number);
         FieldValidations.requiresNonBlank(state);
         Objects.requireNonNull(zipCode);
     }

@@ -1,10 +1,7 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.provider;
 
-import com.algaworks.algashop.ordering.domain.model.entity.Customer;
-import com.algaworks.algashop.ordering.domain.model.entity.CustomerTestDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.entity.ShoppingCart;
-import com.algaworks.algashop.ordering.domain.model.entity.ShoppingCartTestDataBuilder;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.CustomerId;
+import com.algaworks.algashop.ordering.domain.model.entity.*;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.CustomerPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.ShoppingCartPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.config.SpringDataAuditingConfig;
@@ -19,8 +16,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 
 @DataJpaTest
 @Import({
@@ -82,7 +79,7 @@ class ShoppingCartsPersistenceProviderIT {
         assertThat(persistenceProvider.exists(shoppingCart.id())).isFalse();
         assertThat(entityRepository.findById(shoppingCart.id().value())).isEmpty();
     }
-
+    
     @Test
     public void shouldRemoveShoppingCartByEntity() {
         ShoppingCart shoppingCart = ShoppingCartTestDataBuilder.aShoppingCart().build();
@@ -114,7 +111,7 @@ class ShoppingCartsPersistenceProviderIT {
 
         ShoppingCart cart1 = ShoppingCartTestDataBuilder.aShoppingCart().build();
         persistenceProvider.add(cart1);
-
+        
         Customer otherCustomer = CustomerTestDataBuilder.existingCustomer().id(new CustomerId()).build();
         customersPersistenceProvider.add(otherCustomer);
 
@@ -125,7 +122,7 @@ class ShoppingCartsPersistenceProviderIT {
 
         assertThat(finalCount).isEqualTo(initialCount + 2);
     }
-
+    
     @Test
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public void shouldAddAndFindWhenNoTransaction() {

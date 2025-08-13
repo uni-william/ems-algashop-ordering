@@ -2,9 +2,9 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.provider;
 
 import com.algaworks.algashop.ordering.domain.model.entity.Order;
 import com.algaworks.algashop.ordering.domain.model.repository.Orders;
-import com.algaworks.algashop.ordering.domain.model.valueObject.Money;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.CustomerId;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.OrderId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.OrderPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.disassembler.OrderPersistenceEntityDisassembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
@@ -17,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
-
+import java.time.OffsetDateTime;
 import java.time.Year;
-
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,21 +52,26 @@ public class OrdersPersistenceProvider implements Orders {
         return persistenceRepository.count();
     }
 
+
     @Override
     @Transactional(readOnly = false)
     public void add(Order aggregateRoot) {
         long orderId = aggregateRoot.id().value().toLong();
 
         persistenceRepository.findById(orderId)
-                .ifPresentOrElse(
-                        (persistenceEntity) -> update(aggregateRoot, persistenceEntity) ,
-                        ()-> insert(aggregateRoot)
-                );
+            .ifPresentOrElse(
+                (persistenceEntity) -> update(aggregateRoot, persistenceEntity),
+                ()-> insert(aggregateRoot)
+            );
     }
 
     @Override
     public List<Order> placedByCustomerInYear(CustomerId customerId, Year year) {
-        List<OrderPersistenceEntity> entities = persistenceRepository.placedByCustomerInYear(customerId.value(), year.getValue());
+        List<OrderPersistenceEntity> entities = persistenceRepository.placedByCustomerInYear(
+                customerId.value(),
+                year.getValue()
+        );
+
         return entities.stream().map(disassembler::toDomainEntity).collect(Collectors.toList());
     }
 
@@ -80,7 +85,6 @@ public class OrdersPersistenceProvider implements Orders {
         return new Money(this.persistenceRepository.totalSoldForCustomer(customerId.value()));
     }
 
-
     private void update(Order aggregateRoot, OrderPersistenceEntity persistenceEntity) {
         persistenceEntity = assembler.merge(persistenceEntity, aggregateRoot);
         entityManager.detach(persistenceEntity);
@@ -93,6 +97,7 @@ public class OrdersPersistenceProvider implements Orders {
         persistenceRepository.saveAndFlush(persistenceEntity);
         updateVersion(aggregateRoot, persistenceEntity);
     }
+
     @SneakyThrows
     private void updateVersion(Order aggregateRoot, OrderPersistenceEntity persistenceEntity) {
         Field version = aggregateRoot.getClass().getDeclaredField("version");
@@ -100,7 +105,5 @@ public class OrdersPersistenceProvider implements Orders {
         ReflectionUtils.setField(version, aggregateRoot, persistenceEntity.getVersion());
         version.setAccessible(false);
     }
-
-
 
 }

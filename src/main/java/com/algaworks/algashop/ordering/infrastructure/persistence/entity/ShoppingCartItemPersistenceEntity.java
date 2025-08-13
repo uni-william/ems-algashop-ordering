@@ -22,42 +22,42 @@ import java.util.UUID;
 @Table(name = "shopping_cart_item")
 @EntityListeners(AuditingEntityListener.class)
 public class ShoppingCartItemPersistenceEntity {
-    @Id
-    @EqualsAndHashCode.Include
-    private UUID id;
-    @JoinColumn
-    @ManyToOne(optional = false)
-    private ShoppingCartPersistenceEntity shoppingCart;
-    private UUID productId;
-    private String name;
-    private BigDecimal price;
-    private Integer quantity;
-    private Boolean available;
-    private BigDecimal totalAmount;
+	@Id
+	@EqualsAndHashCode.Include
+	private UUID id;
+	@JoinColumn
+	@ManyToOne(optional = false)
+	private ShoppingCartPersistenceEntity shoppingCart;
+	private UUID productId;
+	private String name;
+	private BigDecimal price;
+	private Integer quantity;
+	private Boolean available;
+	private BigDecimal totalAmount;
 
-    @CreatedBy
-    private UUID createdByUserId;
+	@CreatedBy
+	private UUID createdByUserId;
 
-    @CreatedDate
-    private OffsetDateTime createdAt;
+	@CreatedDate
+	private OffsetDateTime createdAt;
 
-    @LastModifiedDate
-    private OffsetDateTime lastModifiedAt;
+	@LastModifiedDate
+	private OffsetDateTime lastModifiedAt;
 
-    @LastModifiedBy
-    private UUID lastModifiedByUserId;
+	@LastModifiedBy
+	private UUID lastModifiedByUserId;
 
-    @Version
-    private Long version;
+	@Version
+	private Long version;
 
-    private ShoppingCartPersistenceEntity getShoppingCart() {
-        return shoppingCart;
-    }
+	private ShoppingCartPersistenceEntity getShoppingCart() {
+		return shoppingCart;
+	}
 
-    public UUID getShoppingCartId() {
-        if (getShoppingCart() == null) {
-            return null;
-        }
-        return getShoppingCart().getId();
-    }
+	public UUID getShoppingCartId() {
+		if (getShoppingCart() == null) {
+			return null;
+		}
+		return getShoppingCart().getId();
+	}
 }

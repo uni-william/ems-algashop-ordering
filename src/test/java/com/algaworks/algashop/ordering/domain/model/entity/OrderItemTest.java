@@ -1,10 +1,8 @@
 package com.algaworks.algashop.ordering.domain.model.entity;
 
-
-import com.algaworks.algashop.ordering.domain.model.valueObject.Product;
-
-import com.algaworks.algashop.ordering.domain.model.valueObject.Quantity;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.OrderId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Product;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

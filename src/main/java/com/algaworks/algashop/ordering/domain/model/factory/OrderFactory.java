@@ -2,11 +2,11 @@ package com.algaworks.algashop.ordering.domain.model.factory;
 
 import com.algaworks.algashop.ordering.domain.model.entity.Order;
 import com.algaworks.algashop.ordering.domain.model.entity.PaymentMethod;
-import com.algaworks.algashop.ordering.domain.model.valueObject.Billing;
-import com.algaworks.algashop.ordering.domain.model.valueObject.Product;
-import com.algaworks.algashop.ordering.domain.model.valueObject.Quantity;
-import com.algaworks.algashop.ordering.domain.model.valueObject.Shipping;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.CustomerId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Billing;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Product;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Shipping;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 
 import java.util.Objects;
 

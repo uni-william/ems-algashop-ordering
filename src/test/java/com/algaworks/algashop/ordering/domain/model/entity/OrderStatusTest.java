@@ -1,16 +1,14 @@
 package com.algaworks.algashop.ordering.domain.model.entity;
 
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class OrderStatusTest {
 
-
     @Test
     public void canChangeTo() {
         Assertions.assertThat(OrderStatus.DRAFT.canChangeTo(OrderStatus.PLACED)).isTrue();
-        Assertions.assertThat(OrderStatus.DRAFT.canChangeTo(OrderStatus. CANCELED)).isTrue();
+        Assertions.assertThat(OrderStatus.DRAFT.canChangeTo(OrderStatus.CANCELED)).isTrue();
         Assertions.assertThat(OrderStatus.PAID.canChangeTo(OrderStatus.DRAFT)).isFalse();
     }
 

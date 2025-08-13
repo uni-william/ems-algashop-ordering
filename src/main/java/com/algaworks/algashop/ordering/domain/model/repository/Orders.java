@@ -1,9 +1,9 @@
 package com.algaworks.algashop.ordering.domain.model.repository;
 
 import com.algaworks.algashop.ordering.domain.model.entity.Order;
-import com.algaworks.algashop.ordering.domain.model.valueObject.Money;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.CustomerId;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.OrderId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
 
 import java.time.Year;
 import java.util.List;

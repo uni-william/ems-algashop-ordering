@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.domain.model.entity;
 
-import com.algaworks.algashop.ordering.domain.model.valueObject.Quantity;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.CustomerId;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.ShoppingCartId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Quantity;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartId;
 
 public class ShoppingCartTestDataBuilder {
 
@@ -43,4 +43,4 @@ public class ShoppingCartTestDataBuilder {
         this.withItems = withItems;
         return this;
     }
-}
+} 

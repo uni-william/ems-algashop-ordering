@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Import;
 
 import java.util.UUID;
 
-
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(SpringDataAuditingConfig.class)
@@ -35,7 +34,7 @@ class OrderPersistenceEntityRepositoryIT {
     }
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         UUID customerId = CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID.value();
         if (!customerPersistenceEntityRepository.existsById(customerId)) {
             customerPersistenceEntity = customerPersistenceEntityRepository.saveAndFlush(
@@ -47,7 +46,8 @@ class OrderPersistenceEntityRepositoryIT {
     @Test
     public void shouldPersist() {
         OrderPersistenceEntity entity = OrderPersistenceEntityTestDataBuilder.existingOrder()
-                .customer(customerPersistenceEntity).build();
+                .customer(customerPersistenceEntity)
+                .build();
 
         orderPersistenceEntityRepository.saveAndFlush(entity);
         Assertions.assertThat(orderPersistenceEntityRepository.existsById(entity.getId())).isTrue();
@@ -55,7 +55,6 @@ class OrderPersistenceEntityRepositoryIT {
         OrderPersistenceEntity savedEntity = orderPersistenceEntityRepository.findById(entity.getId()).orElseThrow();
 
         Assertions.assertThat(savedEntity.getItems()).isNotEmpty();
-
     }
 
     @Test
@@ -67,7 +66,8 @@ class OrderPersistenceEntityRepositoryIT {
     @Test
     public void shouldSetAuditingValues() {
         OrderPersistenceEntity entity = OrderPersistenceEntityTestDataBuilder.existingOrder()
-                .customer(customerPersistenceEntity).build();
+                .customer(customerPersistenceEntity)
+                .build();
         entity = orderPersistenceEntityRepository.saveAndFlush(entity);
 
         Assertions.assertThat(entity.getCreatedByUserId()).isNotNull();
@@ -75,6 +75,5 @@ class OrderPersistenceEntityRepositoryIT {
         Assertions.assertThat(entity.getLastModifiedAt()).isNotNull();
         Assertions.assertThat(entity.getLastModifiedByUserId()).isNotNull();
     }
-
 
 }

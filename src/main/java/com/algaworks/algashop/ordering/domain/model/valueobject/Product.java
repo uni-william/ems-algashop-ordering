@@ -1,7 +1,7 @@
-package com.algaworks.algashop.ordering.domain.model.valueObject;
+package com.algaworks.algashop.ordering.domain.model.valueobject;
 
 import com.algaworks.algashop.ordering.domain.model.exception.ProductOutOfStockException;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.ProductId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.ProductId;
 import lombok.Builder;
 
 import java.util.Objects;
@@ -12,7 +12,6 @@ public record Product(
         ProductName name,
         Money price,
         Boolean inStock
-
 ) {
     public Product {
         Objects.requireNonNull(id);
@@ -23,7 +22,7 @@ public record Product(
 
     public void checkOutOfStock() {
         if (isOutOfStock()) {
-            throw  new ProductOutOfStockException(this.id());
+            throw new ProductOutOfStockException(this.id());
         }
     }
 

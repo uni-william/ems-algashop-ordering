@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.provider;
 
+
 import com.algaworks.algashop.ordering.domain.model.entity.CustomerTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.model.entity.Order;
 import com.algaworks.algashop.ordering.domain.model.entity.OrderStatus;
@@ -9,6 +10,7 @@ import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.Orde
 import com.algaworks.algashop.ordering.infrastructure.persistence.config.SpringDataAuditingConfig;
 import com.algaworks.algashop.ordering.infrastructure.persistence.disassembler.CustomerPersistenceEntityDisassembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.disassembler.OrderPersistenceEntityDisassembler;
+import com.algaworks.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import com.algaworks.algashop.ordering.infrastructure.persistence.repository.OrderPersistenceEntityRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +48,7 @@ class OrdersPersistenceProviderIT {
 
     @BeforeEach
     public void setup() {
-        if (!customersPersistenceProvider.exists(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID)){
+        if (!customersPersistenceProvider.exists(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID)) {
             customersPersistenceProvider.add(
                     CustomerTestDataBuilder.existingCustomer().build()
             );
@@ -83,13 +85,12 @@ class OrdersPersistenceProviderIT {
 
     @Test
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
-    public void shouldAddFindAndNotFailWhenNotTransaction() {
+    public void shouldAddFindAndNotFailWhenNoTransaction() {
         Order order = OrderTestDataBuilder.anOrder().build();
         persistenceProvider.add(order);
+
         Assertions.assertThatNoException().isThrownBy(
-                () -> persistenceProvider.ofId(order.id()).orElseThrow()
+                ()-> persistenceProvider.ofId(order.id()).orElseThrow()
         );
-
     }
-
 }

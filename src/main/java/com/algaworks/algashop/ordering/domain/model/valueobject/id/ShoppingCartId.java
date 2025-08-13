@@ -1,18 +1,22 @@
-package com.algaworks.algashop.ordering.domain.model.valueObject.id;
+package com.algaworks.algashop.ordering.domain.model.valueobject.id;
 
 import com.algaworks.algashop.ordering.domain.model.utility.IdGenerator;
 
 import java.util.Objects;
 import java.util.UUID;
 
-public record ProductId(UUID value) {
+public record ShoppingCartId(UUID value) {
 
-    public ProductId {
+    public ShoppingCartId {
         Objects.requireNonNull(value);
     }
 
-    public ProductId() {
+    public ShoppingCartId() {
         this(IdGenerator.generateTimeBasedUUID());
+    }
+
+    public ShoppingCartId(String value) {
+        this(UUID.fromString(value));
     }
 
     @Override

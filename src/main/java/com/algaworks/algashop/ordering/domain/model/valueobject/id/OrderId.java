@@ -1,4 +1,4 @@
-package com.algaworks.algashop.ordering.domain.model.valueObject.id;
+package com.algaworks.algashop.ordering.domain.model.valueobject.id;
 
 import com.algaworks.algashop.ordering.domain.model.utility.IdGenerator;
 import io.hypersistence.tsid.TSID;

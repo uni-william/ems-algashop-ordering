@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.entity;
 
 import com.algaworks.algashop.ordering.domain.model.utility.IdGenerator;
+import com.algaworks.algashop.ordering.infrastructure.persistence.entity.ShoppingCartPersistenceEntity.ShoppingCartPersistenceEntityBuilder;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -11,7 +12,7 @@ public class ShoppingCartPersistenceEntityTestDataBuilder {
     private ShoppingCartPersistenceEntityTestDataBuilder() {
     }
 
-    public static ShoppingCartPersistenceEntity.ShoppingCartPersistenceEntityBuilder existingShoppingCart() {
+    public static ShoppingCartPersistenceEntityBuilder existingShoppingCart() {
         return ShoppingCartPersistenceEntity.builder()
                 .id(IdGenerator.generateTimeBasedUUID())
                 .customer(CustomerPersistenceEntityTestDataBuilder.aCustomer().build())

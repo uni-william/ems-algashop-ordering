@@ -2,8 +2,8 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.provider;
 
 import com.algaworks.algashop.ordering.domain.model.entity.Customer;
 import com.algaworks.algashop.ordering.domain.model.repository.Customers;
-import com.algaworks.algashop.ordering.domain.model.valueObject.Email;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.CustomerId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Email;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.infrastructure.persistence.assembler.CustomerPersistenceEntityAssembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.disassembler.CustomerPersistenceEntityDisassembler;
 import com.algaworks.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
@@ -23,70 +23,71 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CustomersPersistenceProvider implements Customers {
-    private final CustomerPersistenceEntityRepository persistenceRepository;
-    private final CustomerPersistenceEntityAssembler assembler;
-    private final CustomerPersistenceEntityDisassembler disassembler;
 
-    private final EntityManager entityManager;
+	private final CustomerPersistenceEntityRepository persistenceRepository;
+	private final CustomerPersistenceEntityAssembler assembler;
+	private final CustomerPersistenceEntityDisassembler disassembler;
 
-    @Override
-    public Optional<Customer> ofId(CustomerId customerId) {
-        return persistenceRepository.findById(customerId.value())
-                .map(disassembler::toDomainEntity);
-    }
+	private final EntityManager entityManager;
 
-    @Override
-    public boolean exists(CustomerId customerId) {
-        return persistenceRepository.existsById(customerId.value());
-    }
+	@Override
+	public Optional<Customer> ofId(CustomerId customerId) {
+		return persistenceRepository.findById(customerId.value())
+				.map(disassembler::toDomainEntity);
+	}
 
-    @Override
-    @Transactional(readOnly = false)
-    public void add(Customer aggregateRoot) {
-        UUID customerId = aggregateRoot.id().value();
+	@Override
+	public boolean exists(CustomerId customerId) {
+		return persistenceRepository.existsById(customerId.value());
+	}
 
-        persistenceRepository.findById(customerId)
-                .ifPresentOrElse(
-                        (persistenceEntity) -> update(aggregateRoot, persistenceEntity),
-                        ()-> insert(aggregateRoot)
-                );
-    }
+	@Override
+	@Transactional(readOnly = false)
+	public void add(Customer aggregateRoot) {
+		UUID customerId = aggregateRoot.id().value();
 
-    @Override
-    public long count() {
-        return persistenceRepository.count();
-    }
+		persistenceRepository.findById(customerId)
+				.ifPresentOrElse(
+						(persistenceEntity) -> update(aggregateRoot, persistenceEntity),
+						()-> insert(aggregateRoot)
+				);
+	}
 
-    @Override
-    public Optional<Customer> ofEmail(Email email) {
-        return persistenceRepository.findByEmail(email.value())
-                .map(disassembler::toDomainEntity);
-    }
+	@Override
+	public long count() {
+		return persistenceRepository.count();
+	}
 
-    @Override
-    public boolean isEmailUnique(Email email, CustomerId exceptCustomerId) {
-        return !persistenceRepository.existsByEmailAndIdNot(email.value(), exceptCustomerId.value());
-    }
+	@Override
+	public Optional<Customer> ofEmail(Email email) {
+		return persistenceRepository.findByEmail(email.value())
+				.map(disassembler::toDomainEntity);
+	}
 
-    private void update(Customer aggregateRoot, CustomerPersistenceEntity persistenceEntity) {
-        persistenceEntity = assembler.merge(persistenceEntity, aggregateRoot);
-        entityManager.detach(persistenceEntity);
-        persistenceEntity = persistenceRepository.saveAndFlush(persistenceEntity);
-        updateVersion(aggregateRoot, persistenceEntity);
-    }
+	@Override
+	public boolean isEmailUnique(Email email, CustomerId exceptCustomerId) {
+		return !persistenceRepository.existsByEmailAndIdNot(email.value(), exceptCustomerId.value());
+	}
 
-    private void insert(Customer aggregateRoot) {
-        CustomerPersistenceEntity persistenceEntity = assembler.fromDomain(aggregateRoot);
-        persistenceRepository.saveAndFlush(persistenceEntity);
-        updateVersion(aggregateRoot, persistenceEntity);
-    }
+	private void update(Customer aggregateRoot, CustomerPersistenceEntity persistenceEntity) {
+		persistenceEntity = assembler.merge(persistenceEntity, aggregateRoot);
+		entityManager.detach(persistenceEntity);
+		persistenceEntity = persistenceRepository.saveAndFlush(persistenceEntity);
+		updateVersion(aggregateRoot, persistenceEntity);
+	}
 
-    @SneakyThrows
-    private void updateVersion(Customer aggregateRoot, CustomerPersistenceEntity persistenceEntity) {
-        Field version = aggregateRoot.getClass().getDeclaredField("version");
-        version.setAccessible(true);
-        ReflectionUtils.setField(version, aggregateRoot, persistenceEntity.getVersion());
-        version.setAccessible(false);
-    }
+	private void insert(Customer aggregateRoot) {
+		CustomerPersistenceEntity persistenceEntity = assembler.fromDomain(aggregateRoot);
+		persistenceRepository.saveAndFlush(persistenceEntity);
+		updateVersion(aggregateRoot, persistenceEntity);
+	}
+
+	@SneakyThrows
+	private void updateVersion(Customer aggregateRoot, CustomerPersistenceEntity persistenceEntity) {
+		Field version = aggregateRoot.getClass().getDeclaredField("version");
+		version.setAccessible(true);
+		ReflectionUtils.setField(version, aggregateRoot, persistenceEntity.getVersion());
+		version.setAccessible(false);
+	}
 
 }

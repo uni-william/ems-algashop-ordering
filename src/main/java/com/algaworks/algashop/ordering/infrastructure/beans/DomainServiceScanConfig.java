@@ -7,11 +7,11 @@ import org.springframework.context.annotation.FilterType;
 
 @Configuration
 @ComponentScan(
-        basePackages = "com.algaworks.algashop.ordering.domain.model",
-        includeFilters = @ComponentScan.Filter(
-                type = FilterType.ANNOTATION,
-                classes = DomainService.class
-        )
+    basePackages = "com.algaworks.algashop.ordering.domain.model",
+    includeFilters = @ComponentScan.Filter(
+            type = FilterType.ANNOTATION,
+            classes = DomainService.class
+    )
 )
 public class DomainServiceScanConfig {
 }

@@ -91,17 +91,10 @@ public class OrderPersistenceEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderItemPersistenceEntity> items = new HashSet<>();
 
-
     @Builder
-    public OrderPersistenceEntity(CustomerPersistenceEntity customer, Long id, BigDecimal totalAmount,
-                                  Integer totalItems, String status, String paymentMethod,
-                                  OffsetDateTime placedAt, OffsetDateTime paidAt,
-                                  OffsetDateTime canceledAt, OffsetDateTime readyAt,
-                                  UUID createdByUserId, OffsetDateTime lastModifiedAt,
-                                  UUID lastModifiedByUserId, Long version, BillingEmbeddable billing,
-                                  ShippingEmbeddable shipping, Set<OrderItemPersistenceEntity> items) {
-        this.customer = customer;
+    public OrderPersistenceEntity(Long id, CustomerPersistenceEntity customer, BigDecimal totalAmount, Integer totalItems, String status, String paymentMethod, OffsetDateTime placedAt, OffsetDateTime paidAt, OffsetDateTime canceledAt, OffsetDateTime readyAt, UUID createdByUserId, OffsetDateTime lastModifiedAt, UUID lastModifiedByUserId, Long version, BillingEmbeddable billing, ShippingEmbeddable shipping, Set<OrderItemPersistenceEntity> items) {
         this.id = id;
+        this.customer = customer;
         this.totalAmount = totalAmount;
         this.totalItems = totalItems;
         this.status = status;
@@ -124,25 +117,27 @@ public class OrderPersistenceEntity {
             this.setItems(new HashSet<>());
             return;
         }
+
         items.forEach(i -> i.setOrder(this));
         this.setItems(items);
     }
 
     public void addItem(OrderItemPersistenceEntity item) {
         if (item == null) {
-            return ;
+            return;
         }
 
         if (this.getItems() == null) {
             this.setItems(new HashSet<>());
         }
+
         item.setOrder(this);
         this.getItems().add(item);
     }
 
     public UUID getCustomerId() {
         if (this.customer == null) {
-           return  null;
+            return null;
         }
         return this.customer.getId();
     }

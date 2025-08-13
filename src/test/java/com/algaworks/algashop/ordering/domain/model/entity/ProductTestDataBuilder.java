@@ -1,9 +1,9 @@
 package com.algaworks.algashop.ordering.domain.model.entity;
 
-import com.algaworks.algashop.ordering.domain.model.valueObject.Money;
-import com.algaworks.algashop.ordering.domain.model.valueObject.Product;
-import com.algaworks.algashop.ordering.domain.model.valueObject.ProductName;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.ProductId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Money;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Product;
+import com.algaworks.algashop.ordering.domain.model.valueobject.ProductName;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.ProductId;
 
 public class ProductTestDataBuilder {
 

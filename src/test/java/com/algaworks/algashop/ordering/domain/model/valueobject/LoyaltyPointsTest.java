@@ -1,5 +1,4 @@
-package com.algaworks.algashop.ordering.domain.model.valueObject;
-
+package com.algaworks.algashop.ordering.domain.model.valueobject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,17 +20,19 @@ class LoyaltyPointsTest {
     @Test
     void shouldNotAddValue() {
         LoyaltyPoints loyaltyPoints = new LoyaltyPoints(10);
+
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> loyaltyPoints.add(-5));
+                        .isThrownBy(()-> loyaltyPoints.add(-5));
 
         Assertions.assertThat(loyaltyPoints.value()).isEqualTo(10);
     }
 
     @Test
-    void shouldAddZeroValue() {
+    void shouldNotAddZeroValue() {
         LoyaltyPoints loyaltyPoints = new LoyaltyPoints(10);
+
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> loyaltyPoints.add(0));
+                .isThrownBy(()-> loyaltyPoints.add(0));
 
         Assertions.assertThat(loyaltyPoints.value()).isEqualTo(10);
     }

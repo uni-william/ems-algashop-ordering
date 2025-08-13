@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.domain.model.entity;
 
 import com.algaworks.algashop.ordering.domain.model.exception.CustomerArchivedException;
-import com.algaworks.algashop.ordering.domain.model.valueObject.*;
-import com.algaworks.algashop.ordering.domain.model.valueObject.id.CustomerId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.*;
+import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
 import lombok.Builder;
 
 import java.time.OffsetDateTime;
@@ -29,8 +29,8 @@ public class Customer implements AggregateRoot<CustomerId> {
 
     @Builder(builderClassName = "BrandNewCustomerBuild", builderMethodName = "brandNew")
     private static Customer createBrandNew(FullName fullName, BirthDate birthDate, Email email,
-                                           Phone phone, Document document, Boolean promotionNotificationsAllowed,
-                                           Address address) {
+                                    Phone phone, Document document, Boolean promotionNotificationsAllowed,
+                                    Address address) {
         return new Customer(new CustomerId(),
                 null,
                 fullName,
@@ -48,8 +48,8 @@ public class Customer implements AggregateRoot<CustomerId> {
 
     @Builder(builderClassName = "ExistingCustomerBuild", builderMethodName = "existing")
     private Customer(CustomerId id, Long version, FullName fullName, BirthDate birthDate, Email email, Phone phone,
-                     Document document, Boolean promotionNotificationsAllowed, Boolean archived,
-                     OffsetDateTime registeredAt, OffsetDateTime archivedAt, LoyaltyPoints loyaltyPoints, Address address) {
+                    Document document, Boolean promotionNotificationsAllowed, Boolean archived,
+                    OffsetDateTime registeredAt, OffsetDateTime archivedAt, LoyaltyPoints loyaltyPoints, Address address) {
         this.setId(id);
         this.setVersion(version);
         this.setFullName(fullName);
@@ -64,7 +64,7 @@ public class Customer implements AggregateRoot<CustomerId> {
         this.setLoyaltyPoints(loyaltyPoints);
         this.setAddress(address);
     }
-
+    
     public void addLoyaltyPoints(LoyaltyPoints loyaltyPointsAdded) {
         verifyIfChangeable();
         if (loyaltyPointsAdded.equals(LoyaltyPoints.ZERO)) {
@@ -72,7 +72,7 @@ public class Customer implements AggregateRoot<CustomerId> {
         }
         this.setLoyaltyPoints(this.loyaltyPoints().add(loyaltyPointsAdded));
     }
-
+    
     public void archive() {
         verifyIfChangeable();
         this.setArchived(true);
@@ -92,22 +92,22 @@ public class Customer implements AggregateRoot<CustomerId> {
         verifyIfChangeable();
         this.setPromotionNotificationsAllowed(true);
     }
-
+    
     public void disablePromotionNotifications() {
         verifyIfChangeable();
         this.setPromotionNotificationsAllowed(false);
     }
-
+    
     public void changeName(FullName fullName) {
         verifyIfChangeable();
         this.setFullName(fullName);
     }
-
+    
     public void changeEmail(Email email) {
         verifyIfChangeable();
         this.setEmail(email);
-    }
-
+    } 
+    
     public void changePhone(Phone phone) {
         verifyIfChangeable();
         this.setPhone(phone);
