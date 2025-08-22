@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.domain.model.order;
 
+import com.algaworks.algashop.ordering.domain.model.AbstractEventSourceEntity;
 import com.algaworks.algashop.ordering.domain.model.AggregateRoot;
 import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
@@ -15,7 +16,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class Order implements AggregateRoot<OrderId> {
+public class Order extends AbstractEventSourceEntity implements AggregateRoot<OrderId> {
 
     private OrderId id;
     private CustomerId customerId;
@@ -108,16 +109,25 @@ public class Order implements AggregateRoot<OrderId> {
         this.verifyIfCanChangeToPlaced();
         this.changeStatus(OrderStatus.PLACED);
         this.setPlacedAt(OffsetDateTime.now());
+        this.publishDomainEvent(new OrderPlacedEvent(this.id(), this.customerId(), this.placedAt()));
     }
 
     public void markAsPaid() {
         this.changeStatus(OrderStatus.PAID);
         this.setPaidAt(OffsetDateTime.now());
+        this.publishDomainEvent(new OrderPaidEvent(this.id(), this.customerId(), this.paidAt()));
     }
 
     public void markAsReady() {
         this.changeStatus(OrderStatus.READY);
         this.setReadyAt(OffsetDateTime.now());
+        this.publishDomainEvent(new OrderReadyEvent(this.id(), this.customerId(), this.readyAt()));
+    }
+
+    public void cancel() {
+        this.setCanceledAt(OffsetDateTime.now());
+        this.changeStatus(OrderStatus.CANCELED);
+        this.publishDomainEvent(new OrderCanceledEvent(this.id(), this.customerId(), this.canceledAt()));
     }
 
     public void changePaymentMethod(PaymentMethod paymentMethod) {
@@ -166,10 +176,7 @@ public class Order implements AggregateRoot<OrderId> {
         this.recalculateTotals();
     }
 
-    public void cancel() {
-        this.setCanceledAt(OffsetDateTime.now());
-        this.changeStatus(OrderStatus.CANCELED);
-    }
+
 
     public boolean isDraft() {
         return OrderStatus.DRAFT.equals(this.status());
