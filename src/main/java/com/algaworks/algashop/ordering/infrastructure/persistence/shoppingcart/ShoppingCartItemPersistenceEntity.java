@@ -60,4 +60,5 @@ public class ShoppingCartItemPersistenceEntity {
 		}
 		return getShoppingCart().getId();
 	}
+
 }

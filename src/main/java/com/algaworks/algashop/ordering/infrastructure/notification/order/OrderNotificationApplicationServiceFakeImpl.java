@@ -12,7 +12,7 @@ public class OrderNotificationApplicationServiceFakeImpl implements OrderNotific
     @Override
     public void notifyNewRegistration(NotifyNewRegistrationInput input) {
 
-        log.info("Order {}", input.order());
+        log.info("Order {} Date {}", input.order(), input.dateAt());
 
     }
 }

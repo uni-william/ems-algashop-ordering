@@ -1,7 +1,7 @@
 package com.algaworks.algashop.ordering.application.order.management;
 
-
-import com.algaworks.algashop.ordering.application.order.notification.OrderNotificationApplicationService;
+import com.algaworks.algashop.ordering.application.customer.loyaltypoints.CustomerLoyaltyPointsApplicationService;
+import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
 import com.algaworks.algashop.ordering.domain.model.order.*;
@@ -16,6 +16,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @SpringBootTest
 @Transactional
@@ -32,6 +33,9 @@ class OrderManagementApplicationServiceIT {
 
     @MockitoSpyBean
     private OrderEventListener orderEventListener;
+
+    @MockitoSpyBean
+    private CustomerLoyaltyPointsApplicationService loyaltyPointsApplicationService;
 
     @BeforeEach
     public void setup() {
@@ -51,6 +55,8 @@ class OrderManagementApplicationServiceIT {
         Assertions.assertThat(updatedOrder).isPresent();
         Assertions.assertThat(updatedOrder.get().status()).isEqualTo(OrderStatus.CANCELED);
         Assertions.assertThat(updatedOrder.get().canceledAt()).isNotNull();
+
+        Mockito.verify(orderEventListener).listen(Mockito.any(OrderCanceledEvent.class));
     }
 
     @Test
@@ -82,8 +88,7 @@ class OrderManagementApplicationServiceIT {
         Assertions.assertThat(updatedOrder.get().status()).isEqualTo(OrderStatus.PAID);
         Assertions.assertThat(updatedOrder.get().paidAt()).isNotNull();
 
-        Mockito.verify(orderEventListener, Mockito.times(1))
-                .listen(Mockito.any(OrderPaidEvent.class));
+        Mockito.verify(orderEventListener).listen(Mockito.any(OrderPaidEvent.class));
 
 
     }
@@ -125,6 +130,13 @@ class OrderManagementApplicationServiceIT {
         Assertions.assertThat(updatedOrder).isPresent();
         Assertions.assertThat(updatedOrder.get().status()).isEqualTo(OrderStatus.READY);
         Assertions.assertThat(updatedOrder.get().readyAt()).isNotNull();
+
+        Mockito.verify(orderEventListener).listen(Mockito.any(OrderReadyEvent.class));
+        Mockito.verify(loyaltyPointsApplicationService).addLoyaltyPoints(
+                Mockito.any(UUID.class),
+                Mockito.any(String.class)
+        );
+
     }
 
     @Test
