@@ -27,7 +27,7 @@ public class OrderSummaryOutput {
     private String paymentMethod;
 
     public OrderSummaryOutput(Long id,
-                              CustomerMinimalOutput customer,
+
                               Integer totalItems,
                               BigDecimal totalAmount,
                               OffsetDateTime placedAt,
@@ -35,9 +35,9 @@ public class OrderSummaryOutput {
                               OffsetDateTime canceledAt,
                               OffsetDateTime readyAt,
                               String status,
-                              String paymentMethod) {
+                              String paymentMethod,
+                              CustomerMinimalOutput customer) {
         this.id = new OrderId(id).toString();
-        this.customer = customer;
         this.totalItems = totalItems;
         this.totalAmount = totalAmount;
         this.placedAt = placedAt;
@@ -46,5 +46,6 @@ public class OrderSummaryOutput {
         this.readyAt = readyAt;
         this.status = status;
         this.paymentMethod = paymentMethod;
+        this.customer = customer;
     }
 }
