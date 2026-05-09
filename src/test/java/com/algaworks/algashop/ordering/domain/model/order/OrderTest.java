@@ -139,8 +139,10 @@ class OrderTest {
 
         order.changeShipping(shipping);
 
-        Assertions.assertWith(order, o -> Assertions.assertThat(o.shipping()).isEqualTo(shipping),
-                o-> Assertions.assertThat(o.totalAmount()).isEqualTo(expectedTotalAmount));
+        Assertions.assertWith(order,
+                o -> Assertions.assertThat(o.shipping()).isEqualTo(shipping),
+                o -> Assertions.assertThat(o.totalAmount()).isEqualTo(expectedTotalAmount)
+        );
     }
 
     @Test

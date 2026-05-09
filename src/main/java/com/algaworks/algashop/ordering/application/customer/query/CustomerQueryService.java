@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface CustomerQueryService {
     CustomerOutput findById(UUID customerId);
-    Page filter(CustomerFilter filter);
+    Page<CustomerSummaryOutput> filter(CustomerFilter filter);
 }

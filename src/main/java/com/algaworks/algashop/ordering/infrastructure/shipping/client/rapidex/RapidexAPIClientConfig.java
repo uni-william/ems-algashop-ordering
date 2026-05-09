@@ -8,17 +8,16 @@ import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
-public class RapidexAPIClientConfig {
+public class RapiDexAPIClientConfig {
 
     @Bean
-    public RapidexAPIClient rapidexApiClient(
+    public RapiDexAPIClient rapidexApiClient(
             RestClient.Builder builder,
-            @Value("${algashop.integrations.rapidex.url}") String rapidexUrl) {
-        RestClient restClient = builder.baseUrl(rapidexUrl).build();
-        RestClientAdapter adapterr = RestClientAdapter.create(restClient);
-        HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory.builderFor(adapterr).build();
-        return proxyFactory.createClient(RapidexAPIClient.class);
+            @Value("${algashop.integrations.rapidex.url}") String rapiDexUrl) {
+        RestClient restClient = builder.baseUrl(rapiDexUrl).build();
+        RestClientAdapter adapter = RestClientAdapter.create(restClient);
+        HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory.builderFor(adapter).build();
+        return proxyFactory.createClient(RapiDexAPIClient.class);
     }
-
 
 }

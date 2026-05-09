@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @Component
 @ConditionalOnProperty(name = "algashop.integrations.shipping.provider", havingValue = "FAKE")
 public class ShippingCostServiceFakeImpl implements ShippingCostService {
-
     @Override
     public CalculationResult calculate(CalculationRequest request) {
         return new CalculationResult(

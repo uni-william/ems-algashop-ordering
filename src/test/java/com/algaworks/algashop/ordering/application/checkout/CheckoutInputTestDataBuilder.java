@@ -7,6 +7,7 @@ import com.algaworks.algashop.ordering.application.order.query.RecipientData;
 import java.util.UUID;
 
 public class CheckoutInputTestDataBuilder {
+
     public static CheckoutInput.CheckoutInputBuilder aCheckoutInput() {
         return CheckoutInput.builder()
                 .shoppingCartId(UUID.randomUUID())
@@ -45,5 +46,4 @@ public class CheckoutInputTestDataBuilder {
                                 .build())
                         .build());
     }
-
 }

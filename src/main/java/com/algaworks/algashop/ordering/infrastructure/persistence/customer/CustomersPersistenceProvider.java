@@ -44,10 +44,11 @@ public class CustomersPersistenceProvider implements Customers {
 
 		persistenceRepository.findById(customerId)
 				.ifPresentOrElse(
-						(persistenceEntity) -> update(aggregateRoot, persistenceEntity),
+						persistenceEntity -> update(aggregateRoot, persistenceEntity),
 						()-> insert(aggregateRoot)
 				);
-        aggregateRoot.clearDomainEvents();
+
+		aggregateRoot.clearDomainEvents();
 	}
 
 	@Override

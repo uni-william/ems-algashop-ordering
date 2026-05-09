@@ -18,4 +18,5 @@ public class SpecificationBeansConfig {
                 new LoyaltyPoints(2000)
         );
     }
+
 }

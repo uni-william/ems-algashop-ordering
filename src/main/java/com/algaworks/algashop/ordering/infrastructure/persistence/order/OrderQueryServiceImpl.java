@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.infrastructure.persistence.order;
 
 import com.algaworks.algashop.ordering.application.order.query.*;
 import com.algaworks.algashop.ordering.application.utility.Mapper;
+import com.algaworks.algashop.ordering.application.utility.PageFilter;
 import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import com.algaworks.algashop.ordering.domain.model.order.OrderNotFoundException;
 import jakarta.persistence.EntityManager;
@@ -32,7 +33,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
     @Override
     public OrderDetailOutput findById(String id) {
         OrderPersistenceEntity entity = repository.findById(new OrderId(id).value().toLong())
-                .orElseThrow(OrderNotFoundException::new);
+                .orElseThrow(() -> new OrderNotFoundException());
         return mapper.convert(entity, OrderDetailOutput.class);
     }
 
@@ -91,7 +92,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
                                 customer.get("document"),
                                 customer.get("phone")
                         )
-                )
+                    )
         );
         Predicate[] predicates = toPredicates(builder, root, filter);
         Order sortOrder = toSortOrder(builder, root, filter);
@@ -112,17 +113,16 @@ public class OrderQueryServiceImpl implements OrderQueryService {
     }
 
     private Order toSortOrder(CriteriaBuilder builder, Root<OrderPersistenceEntity> root, OrderFilter filter) {
-        if (filter.getSortDirection() == Sort.Direction.ASC) {
-            return builder.asc(
-                    root.get(filter.getSortByPropertyOrDefault().getPropertyName()));
-        }
-        if (filter.getSortDirection() == Sort.Direction.DESC) {
-            return builder.desc(
-                    root.get(filter.getSortByPropertyOrDefault().getPropertyName()));
+
+        if (filter.getSortDirectionOrDefault() == Sort.Direction.ASC) {
+            return builder.asc(root.get(filter.getSortByPropertyOrDefault().getPropertyName()));
         }
 
-        return  null;
+        if (filter.getSortDirectionOrDefault() == Sort.Direction.DESC) {
+            return builder.desc(root.get(filter.getSortByPropertyOrDefault().getPropertyName()));
+        }
 
+        return null;
     }
 
     private Predicate[] toPredicates(CriteriaBuilder builder,
@@ -134,7 +134,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
         }
 
         if (filter.getStatus() != null && !filter.getStatus().isBlank()) {
-            predicates.add(builder.equal(root.get("status"), filter.getStatus().toUpperCase()));
+            predicates.add(builder.equal(root.get("status"), filter. getStatus().toUpperCase()));
         }
 
         if (filter.getOrderId() != null) {
@@ -142,8 +142,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
             try {
                 OrderId orderId = new OrderId(filter.getOrderId());
                 orderIdLongValue = orderId.value().toLong();
-
-            } catch(IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 orderIdLongValue = 0L;
             }
             predicates.add(builder.equal(root.get("id"), orderIdLongValue));

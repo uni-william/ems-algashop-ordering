@@ -21,4 +21,5 @@ public class CustomerUpdateInputTestDataBuilder {
                         .zipCode("94043")
                         .build());
     }
+
 }

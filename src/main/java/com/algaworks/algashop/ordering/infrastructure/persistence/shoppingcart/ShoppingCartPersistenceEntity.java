@@ -25,7 +25,9 @@ import java.util.UUID;
 @Table(name = "\"shopping_cart\"")
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class ShoppingCartPersistenceEntity extends AbstractAggregateRoot<ShoppingCartPersistenceEntity> {
+public class ShoppingCartPersistenceEntity
+	extends AbstractAggregateRoot<ShoppingCartPersistenceEntity> {
+
 	@Id
 	@EqualsAndHashCode.Include
 	private UUID id;
@@ -36,7 +38,7 @@ public class ShoppingCartPersistenceEntity extends AbstractAggregateRoot<Shoppin
 	@ManyToOne(optional = false)
 	private CustomerPersistenceEntity customer;
 
-	@OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<ShoppingCartItemPersistenceEntity> items = new HashSet<>();
 
 	@CreatedBy
@@ -99,15 +101,15 @@ public class ShoppingCartPersistenceEntity extends AbstractAggregateRoot<Shoppin
 		this.setItems(updatedItems);
 	}
 
-    public Collection<Object> getEvents() {
-        return super.domainEvents();
-    }
+	public Collection<Object> getEvents() {
+		return super.domainEvents();
+	}
 
-    public void addEvents(Collection<Object> events) {
-        if (events != null) {
-            for(Object event : events) {
-                this.registerEvent(event);
-            }
-        }
-    }
+	public void addEvents(Collection<Object> events) {
+		if (events != null) {
+			for (Object event : events) {
+				this.registerEvent(event);
+			}
+		}
+	}
 }

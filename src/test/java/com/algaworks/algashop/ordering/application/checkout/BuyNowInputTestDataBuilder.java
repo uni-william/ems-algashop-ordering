@@ -7,6 +7,7 @@ import com.algaworks.algashop.ordering.domain.model.customer.CustomerTestDataBui
 import com.algaworks.algashop.ordering.domain.model.product.ProductTestDataBuilder;
 
 public class BuyNowInputTestDataBuilder {
+
     public static BuyNowInput.BuyNowInputBuilder aBuyNowInput() {
         return BuyNowInput.builder()
                 .productId(ProductTestDataBuilder.DEFAULT_PRODUCT_ID.value())
@@ -47,4 +48,5 @@ public class BuyNowInputTestDataBuilder {
                                 .build())
                         .build());
     }
+
 }

@@ -5,9 +5,6 @@ import com.algaworks.algashop.ordering.domain.model.customer.Customer;
 import com.algaworks.algashop.ordering.domain.model.customer.LoyaltyPoints;
 import lombok.RequiredArgsConstructor;
 
-import java.time.Year;
-
-@RequiredArgsConstructor
 public class CustomerHaveFreeShippingSpecification implements Specification<Customer> {
 
     private final CustomerHasOrderedEnoughAtYearSpecification hasOrderedEnoughAtYear;

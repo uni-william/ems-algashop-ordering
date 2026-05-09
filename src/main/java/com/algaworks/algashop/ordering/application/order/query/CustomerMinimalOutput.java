@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,5 +18,4 @@ public class CustomerMinimalOutput {
     private String email;
     private String document;
     private String phone;
-
 }

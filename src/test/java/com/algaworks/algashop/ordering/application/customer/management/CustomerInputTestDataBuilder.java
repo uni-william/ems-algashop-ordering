@@ -11,7 +11,7 @@ public class CustomerInputTestDataBuilder {
         return CustomerInput.builder()
                 .firstName("John")
                 .lastName("Doe")
-                .birthDate(LocalDate.of(1991, 7, 5))
+                .birthDate(LocalDate.of(1991, 7,5))
                 .document("255-08-0578")
                 .phone("478-256-2604")
                 .email("johndoe@email.com")

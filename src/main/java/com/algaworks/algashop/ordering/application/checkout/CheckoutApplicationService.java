@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.application.checkout;
 
 import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import com.algaworks.algashop.ordering.domain.model.customer.Customer;
+import com.algaworks.algashop.ordering.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
 import com.algaworks.algashop.ordering.domain.model.order.CheckoutService;
@@ -28,52 +29,52 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class CheckoutApplicationService {
 
-    private final Orders orders;
-    private final ShoppingCarts shoppingCarts;
-    private final Customers customers;
-    private final CheckoutService checkoutService;
+	private final Orders orders;
+	private final ShoppingCarts shoppingCarts;
+	private final Customers customers;
 
-    private final BillingInputDisassembler billingInputDisassembler;
-    private final ShippingInputDisassembler shippingInputDisassembler;
+	private final CheckoutService checkoutService;
 
-    private final ShippingCostService shippingCostService;
-    private final OriginAddressService originAddressService;
-    private final ProductCatalogService productCatalogService;
+	private final BillingInputDisassembler billingInputDisassembler;
+	private final ShippingInputDisassembler shippingInputDisassembler;
 
-    @Transactional
-    public String checkout(CheckoutInput input) {
-        Objects.requireNonNull(input);
-        PaymentMethod paymentMethod = PaymentMethod.valueOf(input.getPaymentMethod());
+	private final ShippingCostService shippingCostService;
+	private final OriginAddressService originAddressService;
+	private final ProductCatalogService productCatalogService;
 
-        ShoppingCartId shoppingCartId = new ShoppingCartId(input.getShoppingCartId());
-        ShoppingCart shoppingCart = shoppingCarts.ofId(shoppingCartId)
-                .orElseThrow(ShoppingCartNotFoundException::new);
+	@Transactional
+	public String checkout(CheckoutInput input) {
+		Objects.requireNonNull(input);
+		PaymentMethod paymentMethod = PaymentMethod.valueOf(input.getPaymentMethod());
 
-        Customer customer = customers.ofId(shoppingCart.customerId()).orElseThrow(CustomerNotFoundException::new);
+		ShoppingCartId shoppingCartId = new ShoppingCartId(input.getShoppingCartId());
+		ShoppingCart shoppingCart = shoppingCarts.ofId(shoppingCartId)
+				.orElseThrow(() -> new ShoppingCartNotFoundException());
 
-        var shippingCalculationResult = calculateShippingCost(input.getShipping());
+		Customer customer = customers.ofId(shoppingCart.customerId()).orElseThrow(() -> new CustomerNotFoundException());
 
-        Order order = checkoutService.checkout(customer,
-                shoppingCart,
-                billingInputDisassembler.toDomainModel(input.getBilling()),
-                shippingInputDisassembler.toDomainModel(input.getShipping(), shippingCalculationResult),
-                paymentMethod);
+		var shippingCalculationResult = calculateShippingCost(input.getShipping());
 
-        orders.add(order);
-        shoppingCarts.add(shoppingCart);
+		Order order = checkoutService.checkout(customer, shoppingCart,
+				billingInputDisassembler.toDomainModel(input.getBilling()),
+				shippingInputDisassembler.toDomainModel(input.getShipping(), shippingCalculationResult),
+				paymentMethod);
 
-        return order.id().toString();
-    }
+		orders.add(order);
+		shoppingCarts.add(shoppingCart);
 
-    private ShippingCostService.CalculationResult calculateShippingCost(ShippingInput shipping) {
-        ZipCode origin = originAddressService.originAddress().zipCode();
-        ZipCode destination = new ZipCode(shipping.getAddress().getZipCode());
-        return shippingCostService.calculate(new ShippingCostService.CalculationRequest(origin, destination));
-    }
+		return order.id().toString();
+	}
 
-    private Product findProduct(ProductId productId) {
-        return productCatalogService.ofId(productId)
-                .orElseThrow(ProductNotFoundException::new);
-    }
+	private ShippingCostService.CalculationResult calculateShippingCost(ShippingInput shipping) {
+		ZipCode origin = originAddressService.originAddress().zipCode();
+		ZipCode destination = new ZipCode(shipping.getAddress().getZipCode());
+		return shippingCostService.calculate(new ShippingCostService.CalculationRequest(origin, destination));
+	}
+
+	private Product findProduct(ProductId productId) {
+		return productCatalogService.ofId(productId)
+				.orElseThrow(()-> new ProductNotFoundException());
+	}
 
 }

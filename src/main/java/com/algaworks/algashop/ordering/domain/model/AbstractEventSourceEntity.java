@@ -1,12 +1,15 @@
 package com.algaworks.algashop.ordering.domain.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
-public abstract class AbstractEventSourceEntity implements DomainEventSource{
+public abstract class AbstractEventSourceEntity implements DomainEventSource {
 
     protected final List<Object> domainEvents = new ArrayList<>();
 
-    protected  void publishDomainEvent(Object event) {
+    protected void publishDomainEvent(Object event) {
         Objects.requireNonNull(event);
         this.domainEvents.add(event);
     }
@@ -20,4 +23,5 @@ public abstract class AbstractEventSourceEntity implements DomainEventSource{
     public void clearDomainEvents() {
         this.domainEvents.clear();
     }
+
 }

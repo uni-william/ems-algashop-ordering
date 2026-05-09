@@ -11,7 +11,9 @@ import java.util.UUID;
 
 import static com.algaworks.algashop.ordering.domain.model.ErrorMessages.*;
 
-public class Customer extends AbstractEventSourceEntity implements AggregateRoot<CustomerId> {
+public class Customer
+        extends AbstractEventSourceEntity
+        implements AggregateRoot<CustomerId> {
     private CustomerId id;
     private FullName fullName;
     private BirthDate birthDate;
@@ -45,8 +47,8 @@ public class Customer extends AbstractEventSourceEntity implements AggregateRoot
                 LoyaltyPoints.ZERO,
                 address);
 
-        customer.publishDomainEvent(new CustomerRegisteredEvent(customer.id(), customer.registeredAt(),
-                customer.fullName(), customer.email()));
+        customer.publishDomainEvent(new CustomerRegisteredEvent(customer.id(),
+                customer.registeredAt(), customer.fullName(), customer.email()));
 
         return customer;
     }

@@ -61,7 +61,7 @@ public class CustomerQueryServiceImpl implements CustomerQueryService {
             TypedQuery<CustomerOutput> query = entityManager.createQuery(findByIdAsOutputJPQL, CustomerOutput.class);
             query.setParameter("id", customerId);
             return query.getSingleResult();
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             throw new CustomerNotFoundException();
         }
     }

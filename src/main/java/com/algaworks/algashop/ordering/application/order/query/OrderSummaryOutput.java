@@ -1,6 +1,5 @@
 package com.algaworks.algashop.ordering.application.order.query;
 
-
 import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,18 +25,12 @@ public class OrderSummaryOutput {
     private String status;
     private String paymentMethod;
 
-    public OrderSummaryOutput(Long id,
-
-                              Integer totalItems,
-                              BigDecimal totalAmount,
-                              OffsetDateTime placedAt,
-                              OffsetDateTime paidAt,
-                              OffsetDateTime canceledAt,
-                              OffsetDateTime readyAt,
-                              String status,
-                              String paymentMethod,
-                              CustomerMinimalOutput customer) {
+    public OrderSummaryOutput(Long id, Integer totalItems,
+                              BigDecimal totalAmount, OffsetDateTime placedAt, OffsetDateTime paidAt,
+                              OffsetDateTime canceledAt, OffsetDateTime readyAt,
+                              String status, String paymentMethod, CustomerMinimalOutput customer) {
         this.id = new OrderId(id).toString();
+        this.customer = customer;
         this.totalItems = totalItems;
         this.totalAmount = totalAmount;
         this.placedAt = placedAt;
@@ -46,6 +39,5 @@ public class OrderSummaryOutput {
         this.readyAt = readyAt;
         this.status = status;
         this.paymentMethod = paymentMethod;
-        this.customer = customer;
     }
 }

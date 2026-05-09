@@ -24,7 +24,8 @@ import java.util.UUID;
 @Table(name = "\"order\"")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @EntityListeners(AuditingEntityListener.class)
-public class OrderPersistenceEntity extends AbstractAggregateRoot<OrderPersistenceEntity> {
+public class OrderPersistenceEntity
+        extends AbstractAggregateRoot<OrderPersistenceEntity> {
     @Id
     @EqualsAndHashCode.Include
     private Long id;
@@ -89,7 +90,7 @@ public class OrderPersistenceEntity extends AbstractAggregateRoot<OrderPersisten
     })
     private ShippingEmbeddable shipping;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItemPersistenceEntity> items = new HashSet<>();
 
     @Builder
@@ -143,11 +144,16 @@ public class OrderPersistenceEntity extends AbstractAggregateRoot<OrderPersisten
         return this.customer.getId();
     }
 
+    public Collection<Object> getEvents() {
+        return super.domainEvents();
+    }
+
     public void addEvents(Collection<Object> events) {
         if (events != null) {
-            for(Object event : events) {
+            for (Object event : events) {
                 this.registerEvent(event);
             }
         }
     }
+
 }

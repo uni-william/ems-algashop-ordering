@@ -24,7 +24,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class CustomerPersistenceEntity extends AbstractAggregateRoot<CustomerPersistenceEntity> {
+public class CustomerPersistenceEntity
+		extends AbstractAggregateRoot<CustomerPersistenceEntity> {
 	@Id
 	@EqualsAndHashCode.Include
 	private UUID id;
@@ -63,15 +64,15 @@ public class CustomerPersistenceEntity extends AbstractAggregateRoot<CustomerPer
 	@LastModifiedBy
 	private UUID lastModifiedByUserId;
 
-    public Collection<Object> getEvents() {
-        return super.domainEvents();
-    }
+	public Collection<Object> getEvents() {
+		return super.domainEvents();
+	}
 
-    public void addEvents(Collection<Object> events) {
-        if (events != null) {
-            for(Object event : events) {
-                this.registerEvent(event);
-            }
-        }
-    }
+	public void addEvents(Collection<Object> events) {
+		if (events != null) {
+			for (Object event : events) {
+				this.registerEvent(event);
+			}
+		}
+	}
 }

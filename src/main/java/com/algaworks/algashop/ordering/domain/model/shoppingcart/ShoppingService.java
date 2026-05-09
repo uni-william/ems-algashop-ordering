@@ -10,20 +10,20 @@ import lombok.RequiredArgsConstructor;
 @DomainService
 @RequiredArgsConstructor
 public class ShoppingService {
+	
+	private final ShoppingCarts shoppingCarts;
+	private final Customers customers;
 
-    private final ShoppingCarts shoppingCarts;
-    private final Customers customers;
+	public ShoppingCart startShopping(CustomerId customerId) {
+		if (!customers.exists(customerId)) {
+			throw new CustomerNotFoundException(customerId);
+		}
 
-    public ShoppingCart startShopping(CustomerId customerId) {
-        if (!customers.exists(customerId)) {
-            throw new CustomerNotFoundException();
-        }
+		if (shoppingCarts.ofCustomer(customerId).isPresent()) {
+			throw new CustomerAlreadyHaveShoppingCartException(customerId);
+		}
 
-        if (shoppingCarts.ofCustomer(customerId).isPresent()) {
-            throw new CustomerAlreadyHaveShoppingCartException();
-        }
-
-        return ShoppingCart.startShopping(customerId);
-    }
+		return ShoppingCart.startShopping(customerId);
+	}
 
 }

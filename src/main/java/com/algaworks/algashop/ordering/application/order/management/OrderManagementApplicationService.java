@@ -38,7 +38,7 @@ public class OrderManagementApplicationService {
     private Order findOrder(String rawOrderId) {
         OrderId orderId = new OrderId(rawOrderId);
         return orders.ofId(orderId)
-                .orElseThrow(() -> new OrderNotFoundException());
+                .orElseThrow(OrderNotFoundException::new);
     }
 
 }

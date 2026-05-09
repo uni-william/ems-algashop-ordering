@@ -16,7 +16,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class Order extends AbstractEventSourceEntity implements AggregateRoot<OrderId> {
+public class Order
+        extends AbstractEventSourceEntity
+        implements AggregateRoot<OrderId> {
 
     private OrderId id;
     private CustomerId customerId;
@@ -86,6 +88,10 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
         Objects.requireNonNull(product);
         Objects.requireNonNull(quantity);
 
+        if (quantity.equals(Quantity.ZERO)) {
+            throw new IllegalArgumentException();
+        }
+
         this.verifyIfChangeable();
 
         product.checkOutOfStock();
@@ -109,25 +115,25 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
         this.verifyIfCanChangeToPlaced();
         this.changeStatus(OrderStatus.PLACED);
         this.setPlacedAt(OffsetDateTime.now());
-        this.publishDomainEvent(new OrderPlacedEvent(this.id(), this.customerId(), this.placedAt()));
+        publishDomainEvent(new OrderPlacedEvent(this.id(), this.customerId(), this.placedAt()));
     }
 
     public void markAsPaid() {
         this.changeStatus(OrderStatus.PAID);
         this.setPaidAt(OffsetDateTime.now());
-        this.publishDomainEvent(new OrderPaidEvent(this.id(), this.customerId(), this.paidAt()));
+        publishDomainEvent(new OrderPaidEvent(this.id(), this.customerId(), this.paidAt()));
     }
 
     public void markAsReady() {
         this.changeStatus(OrderStatus.READY);
         this.setReadyAt(OffsetDateTime.now());
-        this.publishDomainEvent(new OrderReadyEvent(this.id(), this.customerId(), this.readyAt()));
+        publishDomainEvent(new OrderReadyEvent(this.id(), this.customerId(), this.readyAt()));
     }
 
     public void cancel() {
         this.setCanceledAt(OffsetDateTime.now());
         this.changeStatus(OrderStatus.CANCELED);
-        this.publishDomainEvent(new OrderCanceledEvent(this.id(), this.customerId(), this.canceledAt()));
+        publishDomainEvent(new OrderCanceledEvent(this.id(), this.customerId(), this.canceledAt()));
     }
 
     public void changePaymentMethod(PaymentMethod paymentMethod) {
@@ -176,8 +182,6 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
 
         this.recalculateTotals();
     }
-
-
 
     public boolean isDraft() {
         return OrderStatus.DRAFT.equals(this.status());

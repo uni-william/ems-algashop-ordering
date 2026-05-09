@@ -33,7 +33,7 @@ class CustomerManagementApplicationServiceIT {
     private CustomerNotificationApplicationService customerNotificationApplicationService;
 
     @Autowired
-    private CustomerQueryService customerQueryService;
+    private CustomerQueryService queryService;
 
     @Test
     public void shouldRegister() {
@@ -42,29 +42,33 @@ class CustomerManagementApplicationServiceIT {
         UUID customerId = customerManagementApplicationService.create(input);
         Assertions.assertThat(customerId).isNotNull();
 
-        CustomerOutput customerOutput = customerQueryService.findById(customerId);
+        CustomerOutput customerOutput = queryService.findById(customerId);
 
         Assertions.assertThat(customerOutput)
-                        .extracting(
-                                CustomerOutput::getId,
-                                CustomerOutput::getFirstName,
-                                CustomerOutput::getLastName,
-                                CustomerOutput::getEmail,
-                                CustomerOutput::getBirthDate
-                        ).containsExactly(
-                                customerId,
-                                "John",
-                                "Doe",
-                                "johndoe@email.com",
-                                LocalDate.of(1991, 7,5)
-                );
+            .extracting(
+                    CustomerOutput::getId,
+                    CustomerOutput::getFirstName,
+                    CustomerOutput::getLastName,
+                    CustomerOutput::getEmail,
+                    CustomerOutput::getBirthDate
+            ).containsExactly(
+                    customerId,
+                    "John",
+                    "Doe",
+                    "johndoe@email.com",
+                    LocalDate.of(1991, 7,5)
+            );
+
         Assertions.assertThat(customerOutput.getRegisteredAt()).isNotNull();
 
-        Mockito.verify(customerEventListener).listen(Mockito.any(CustomerRegisteredEvent.class));
+        Mockito.verify(customerEventListener)
+                .listen(Mockito.any(CustomerRegisteredEvent.class));
 
-        Mockito.verify(customerEventListener, Mockito.never()).listen(Mockito.any(CustomerArchivedEvent.class));
+        Mockito.verify(customerEventListener, Mockito.never())
+                .listen(Mockito.any(CustomerArchivedEvent.class));
 
-        Mockito.verify(customerNotificationApplicationService).notifyNewRegistration(Mockito.any(CustomerNotificationApplicationService.NotifyNewRegistrationInput.class));
+        Mockito.verify(customerNotificationApplicationService)
+                .notifyNewRegistration(Mockito.any(CustomerNotificationApplicationService.NotifyNewRegistrationInput.class));
     }
 
     @Test
@@ -77,22 +81,23 @@ class CustomerManagementApplicationServiceIT {
 
         customerManagementApplicationService.update(customerId, updateInput);
 
-        CustomerOutput customerOutput = customerQueryService.findById(customerId);
+        CustomerOutput customerOutput = queryService.findById(customerId);
 
         Assertions.assertThat(customerOutput)
-                .extracting(
-                        CustomerOutput::getId,
-                        CustomerOutput::getFirstName,
-                        CustomerOutput::getLastName,
-                        CustomerOutput::getEmail,
-                        CustomerOutput::getBirthDate
-                ).containsExactly(
-                        customerId,
-                        "Matt",
-                        "Damon",
-                        "johndoe@email.com",
-                        LocalDate.of(1991, 7,5)
+            .extracting(
+                    CustomerOutput::getId,
+                    CustomerOutput::getFirstName,
+                    CustomerOutput::getLastName,
+                    CustomerOutput::getEmail,
+                    CustomerOutput::getBirthDate
+            ).containsExactly(
+                    customerId,
+                    "Matt",
+                    "Damon",
+                    "johndoe@email.com",
+                    LocalDate.of(1991, 7,5)
                 );
+
         Assertions.assertThat(customerOutput.getRegisteredAt()).isNotNull();
     }
 
@@ -104,7 +109,7 @@ class CustomerManagementApplicationServiceIT {
 
         customerManagementApplicationService.archive(customerId);
 
-        CustomerOutput archivedCustomer = customerQueryService.findById(customerId);
+        CustomerOutput archivedCustomer = queryService.findById(customerId);
 
         Assertions.assertThat(archivedCustomer)
                 .isNotNull()
@@ -152,6 +157,5 @@ class CustomerManagementApplicationServiceIT {
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
                 .isThrownBy(() -> customerManagementApplicationService.archive(customerId));
     }
-
 
 }

@@ -50,19 +50,20 @@ public class CustomerManagementApplicationService {
         Objects.requireNonNull(input);
         Objects.requireNonNull(rawCustomerId);
 
-     Customer customer = customers.ofId(new CustomerId(rawCustomerId))
-                .orElseThrow(() -> new CustomerNotFoundException());
+        Customer customer = customers.ofId(new CustomerId(rawCustomerId))
+                .orElseThrow(CustomerNotFoundException::new);
 
-     customer.changeName(new FullName(input.getFirstName(), input.getLastName()));
-     customer.changePhone(new Phone(input.getPhone()));
+        customer.changeName(new FullName(input.getFirstName(), input.getLastName()));
+        customer.changePhone(new Phone(input.getPhone()));
 
-     if (Boolean.TRUE.equals(input.getPromotionNotificationsAllowed())) {
-         customer.enablePromotionNotifications();
-     } else {
-         customer.disablePromotionNotifications();
-     }
+        if (Boolean.TRUE.equals(input.getPromotionNotificationsAllowed())) {
+            customer.enablePromotionNotifications();
+        } else {
+            customer.disablePromotionNotifications();
+        }
 
         AddressData address = input.getAddress();
+
         customer.changeAddress(Address.builder()
                 .zipCode(new ZipCode(address.getZipCode()))
                 .state(address.getState())
@@ -74,14 +75,13 @@ public class CustomerManagementApplicationService {
                 .build());
 
         customers.add(customer);
-
     }
 
     @Transactional
     public void archive(UUID rawCustomerId) {
         CustomerId customerId = new CustomerId(rawCustomerId);
         Customer customer = customers.ofId(new CustomerId(rawCustomerId))
-                .orElseThrow(()-> new CustomerNotFoundException());
+                .orElseThrow(CustomerNotFoundException::new);
         customer.archive();
         customers.add(customer);
     }
@@ -90,8 +90,9 @@ public class CustomerManagementApplicationService {
     public void changeEmail(UUID rawCustomerId, String newEmail) {
         CustomerId customerId = new CustomerId(rawCustomerId);
         Customer customer = customers.ofId(new CustomerId(rawCustomerId))
-                .orElseThrow(()-> new CustomerNotFoundException());
+                .orElseThrow(CustomerNotFoundException::new);
         customerRegistration.changeEmail(customer, new Email(newEmail));
         customers.add(customer);
     }
+
 }

@@ -1,7 +1,6 @@
 package com.algaworks.algashop.ordering.domain.model;
 
 public interface Specification<T> {
-
     boolean isSatisfiedBy(T t);
 
     default Specification<T> and(Specification<T> other) {
@@ -19,4 +18,5 @@ public interface Specification<T> {
     default Specification<T> andNot(Specification<T> other) {
         return t -> this.isSatisfiedBy(t) && !other.isSatisfiedBy(t);
     }
+
 }

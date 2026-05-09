@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class CustomerInput {
-
     @NotBlank
     private String firstName;
 
@@ -45,5 +44,4 @@ public class CustomerInput {
     @NotNull
     @Valid
     private AddressData address;
-
 }

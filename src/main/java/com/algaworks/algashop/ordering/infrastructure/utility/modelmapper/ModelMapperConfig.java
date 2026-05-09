@@ -31,7 +31,7 @@ public class ModelMapperConfig {
                 return fullName.firstName();
             };
 
-    private static final Converter<FullName, String> lastNameToFirstNameConverter =
+    private static final Converter<FullName, String> fullNameToLastNameConverter =
             mappingContext -> {
                 FullName fullName = mappingContext.getSource();
                 if (fullName == null) {
@@ -76,7 +76,7 @@ public class ModelMapperConfig {
                         mapping.using(fullNameToFirstNameConverter)
                                 .map(Customer::fullName, CustomerOutput::setFirstName))
                 .addMappings(mapping ->
-                        mapping.using(lastNameToFirstNameConverter)
+                        mapping.using(fullNameToLastNameConverter)
                                 .map(Customer::fullName, CustomerOutput::setLastName))
                 .addMappings(mapping ->
                         mapping.using(birthDateToLocalDateConverter)
@@ -94,6 +94,8 @@ public class ModelMapperConfig {
                 .addMappings(mapping ->
                         mapping.using(longToStringTSIDConverter)
                                 .map(OrderItemPersistenceEntity::getOrderId, OrderItemDetailOutput::setOrderId));
+
+
     }
 
 }

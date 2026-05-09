@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @ConditionalOnProperty(name = "algashop.integrations.shipping.provider", havingValue = "RAPIDEX")
 public class ShippingCostServiceRapidexImpl implements ShippingCostService {
 
-    private final RapidexAPIClient rapiDexAPIClient;
+    private final RapiDexAPIClient rapiDexAPIClient;
 
     @Override
     public CalculationResult calculate(CalculationRequest request) {
@@ -24,7 +24,7 @@ public class ShippingCostServiceRapidexImpl implements ShippingCostService {
                 )
         );
 
-        LocalDate expectedDeliveryDate = LocalDate.now().plusDays(Long.parseLong(response.getEstimatedDaysToDeliver()));
+        LocalDate expectedDeliveryDate = LocalDate.now().plusDays(response.getEstimatedDaysToDeliver());
 
         return CalculationResult.builder()
                 .cost(new Money(response.getDeliveryCost()))
