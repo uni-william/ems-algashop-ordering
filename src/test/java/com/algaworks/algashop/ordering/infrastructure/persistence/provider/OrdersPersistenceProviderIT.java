@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,32 +35,21 @@ import org.springframework.transaction.annotation.Transactional;
         SpringDataAuditingConfig.class
 })
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource(properties = "spring.flyway.locations=classpath:db/migration,classpath:db/testdata")
 class OrdersPersistenceProviderIT {
 
     private OrdersPersistenceProvider persistenceProvider;
-    private CustomersPersistenceProvider customersPersistenceProvider;
     private OrderPersistenceEntityRepository entityRepository;
 
     @Autowired
     public OrdersPersistenceProviderIT(OrdersPersistenceProvider persistenceProvider,
-                                       CustomersPersistenceProvider customersPersistenceProvider,
                                        OrderPersistenceEntityRepository entityRepository) {
         this.persistenceProvider = persistenceProvider;
-        this.customersPersistenceProvider = customersPersistenceProvider;
         this.entityRepository = entityRepository;
     }
 
-    @BeforeEach
-    public void setup() {
-        if (!customersPersistenceProvider.exists(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID)) {
-            customersPersistenceProvider.add(
-                    CustomerTestDataBuilder.existingCustomer().build()
-            );
-        }
-    }
-
     @Test
-    public void shouldUpdateAndKeepPersistenceEntityState() {
+    void shouldUpdateAndKeepPersistenceEntityState() {
         Order order = OrderTestDataBuilder.anOrder().status(OrderStatus.PLACED).build();
         long orderId = order.id().value().toLong();
         persistenceProvider.add(order);
@@ -88,7 +78,7 @@ class OrdersPersistenceProviderIT {
 
     @Test
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
-    public void shouldAddFindAndNotFailWhenNoTransaction() {
+    void shouldAddFindAndNotFailWhenNoTransaction() {
         Order order = OrderTestDataBuilder.anOrder().build();
         persistenceProvider.add(order);
 

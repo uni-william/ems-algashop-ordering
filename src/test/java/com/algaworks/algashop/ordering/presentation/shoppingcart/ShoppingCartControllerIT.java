@@ -20,18 +20,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
 
-import java.util.HashSet;
 import java.util.UUID;
 
-import static com.algaworks.algashop.ordering.infrastructure.persistence.entity.ShoppingCartPersistenceEntityTestDataBuilder.existingShoppingCart;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static io.restassured.config.JsonConfig.jsonConfig;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class ShoppingCartControllerIT {
+@Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
+public class ShoppingCartControllerIT {
 
     @LocalServerPort
     private int port;
@@ -43,18 +42,18 @@ class ShoppingCartControllerIT {
     private ShoppingCartPersistenceEntityRepository shoppingCartRepository;
 
     private static final UUID validCustomerId = UUID.fromString("6e148bd5-47f6-4022-b9da-07cfaa294f7a");
+    private static final UUID validShoppingCartId = UUID.fromString("4f31582a-66e6-4601-a9d3-ff608c2d4461");
 
     private WireMockServer wireMockProductCatalog;
     private WireMockServer wireMockRapidex;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
 
         RestAssured.config().jsonConfig(jsonConfig().numberReturnType(JsonPathConfig.NumberReturnType.BIG_DECIMAL));
 
-        initDatabase();
         initWireMock();
     }
 
@@ -74,19 +73,13 @@ class ShoppingCartControllerIT {
     }
 
     @AfterEach
-    void after() {
+    public void after() {
         wireMockRapidex.stop();
         wireMockProductCatalog.stop();
     }
 
-    private void initDatabase() {
-        customerRepository.saveAndFlush(
-                CustomerPersistenceEntityTestDataBuilder.aCustomer().id(validCustomerId).build()
-        );
-    }
-
     @Test
-    void shouldCreateShoppingCart() {
+    public void shouldCreateShoppingCart() {
         String json = AlgaShopResourceUtils.readContent("json/create-shopping-cart.json");
 
         UUID createdShoppingCart = RestAssured
@@ -108,15 +101,7 @@ class ShoppingCartControllerIT {
     }
 
     @Test
-    void shouldAddProductToShoppingCart() {
-        var shoppingCartPersistence = existingShoppingCart().items(new HashSet<>())
-                .customer(customerRepository.getReferenceById(validCustomerId))
-                .build();
-
-        shoppingCartRepository.save(shoppingCartPersistence);
-
-        UUID shoppingCartId = shoppingCartPersistence.getId();
-
+    public void shouldAddProductToShoppingCart() {
         String json = AlgaShopResourceUtils.readContent("json/add-product-to-shopping-cart.json");
 
         RestAssured
@@ -125,13 +110,13 @@ class ShoppingCartControllerIT {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(json)
                 .when()
-                .post("/api/v1/shopping-carts/{shoppingCartId}/items", shoppingCartId)
+                .post("/api/v1/shopping-carts/{shoppingCartId}/items", validShoppingCartId)
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.NO_CONTENT.value());
 
-        var shoppingCartPersistenceEntity = shoppingCartRepository.findById(shoppingCartPersistence.getId()).orElseThrow();
-        Assertions.assertThat(shoppingCartPersistenceEntity.getTotalItems()).isEqualTo(2);
+        var shoppingCartPersistenceEntity = shoppingCartRepository.findById(validShoppingCartId).orElseThrow();
+        Assertions.assertThat(shoppingCartPersistenceEntity.getTotalItems()).isEqualTo(4);
     }
 
 }
