@@ -25,12 +25,12 @@ class ShippingCostServiceIT {
     private WireMockServer wireMockRapidex;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         initWireMock();
     }
 
     @AfterEach
-    public void clean() {
+    void clean() {
         wireMockRapidex.stop();
     }
 
