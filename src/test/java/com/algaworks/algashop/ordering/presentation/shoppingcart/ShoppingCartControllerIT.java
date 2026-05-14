@@ -1,9 +1,7 @@
-package com.algaworks.algashop.ordering.presentation.shoppincart;
+package com.algaworks.algashop.ordering.presentation.shoppingcart;
 
 import com.algaworks.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
-import com.algaworks.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntityTestDataBuilder;
-import com.algaworks.algashop.ordering.infrastructure.persistence.entity.ShoppingCartPersistenceEntityTestDataBuilder;
-import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntity;
+
 import com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
 import com.algaworks.algashop.ordering.utils.AlgaShopResourceUtils;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -30,7 +28,7 @@ import static io.restassured.config.JsonConfig.jsonConfig;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
-public class ShoppingCartControllerIT {
+class ShoppingCartControllerIT {
 
     @LocalServerPort
     private int port;
@@ -48,7 +46,7 @@ public class ShoppingCartControllerIT {
     private WireMockServer wireMockRapidex;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
 
@@ -73,13 +71,13 @@ public class ShoppingCartControllerIT {
     }
 
     @AfterEach
-    public void after() {
+    void after() {
         wireMockRapidex.stop();
         wireMockProductCatalog.stop();
     }
 
     @Test
-    public void shouldCreateShoppingCart() {
+    void shouldCreateShoppingCart() {
         String json = AlgaShopResourceUtils.readContent("json/create-shopping-cart.json");
 
         UUID createdShoppingCart = RestAssured
@@ -101,7 +99,7 @@ public class ShoppingCartControllerIT {
     }
 
     @Test
-    public void shouldAddProductToShoppingCart() {
+    void shouldAddProductToShoppingCart() {
         String json = AlgaShopResourceUtils.readContent("json/add-product-to-shopping-cart.json");
 
         RestAssured
