@@ -56,7 +56,6 @@ public class CustomerController {
         return shoppingCartQueryService.findByCustomerId(customerId);
     }
 
-
     @PutMapping("/{customerId}")
     public CustomerOutput update(@PathVariable UUID customerId,
                                  @RequestBody @Valid CustomerUpdateInput input) {
