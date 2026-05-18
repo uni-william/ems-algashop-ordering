@@ -34,6 +34,7 @@ class CustomerManagementApplicationServiceIT {
 
     @BeforeAll
     public static void beforeAll() {
+        System.setProperty("api.version", "1.44");
         postgreSQLContainer.start();
     }
 
