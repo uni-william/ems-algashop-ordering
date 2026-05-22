@@ -1,10 +1,9 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.order;
 
-import com.algaworks.algashop.ordering.application.order.query.*;
-import com.algaworks.algashop.ordering.application.utility.Mapper;
-import com.algaworks.algashop.ordering.application.utility.PageFilter;
-import com.algaworks.algashop.ordering.domain.model.order.OrderId;
-import com.algaworks.algashop.ordering.domain.model.order.OrderNotFoundException;
+import com.algaworks.algashop.ordering.core.application.order.query.*;
+import com.algaworks.algashop.ordering.core.application.utility.Mapper;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderId;
+import com.algaworks.algashop.ordering.core.domain.model.order.OrderNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -92,7 +90,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
                                 customer.get("document"),
                                 customer.get("phone")
                         )
-                    )
+                )
         );
         Predicate[] predicates = toPredicates(builder, root, filter);
         Order sortOrder = toSortOrder(builder, root, filter);
