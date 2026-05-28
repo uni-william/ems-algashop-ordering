@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.infrastructure.config.locale;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 
 import java.util.Locale;
@@ -10,7 +11,8 @@ import java.util.Locale;
 public class FixedLocaleConfig {
 
     @Bean
-    public FixedLocaleResolver localeResolver() {
+    public LocaleResolver localeResolver() {
         return new FixedLocaleResolver(Locale.ENGLISH);
     }
+
 }

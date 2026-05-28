@@ -2,12 +2,8 @@ package com.algaworks.algashop.ordering.core.domain.model.order;
 
 import com.algaworks.algashop.ordering.core.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.core.domain.model.commons.Quantity;
-import com.algaworks.algashop.ordering.core.domain.model.product.ProductTestDataBuilder;
-import com.algaworks.algashop.ordering.core.domain.model.product.ProductOutOfStockException;
-import com.algaworks.algashop.ordering.core.domain.model.product.Product;
-import com.algaworks.algashop.ordering.core.domain.model.product.ProductName;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerId;
-import com.algaworks.algashop.ordering.core.domain.model.product.ProductId;
+import com.algaworks.algashop.ordering.core.domain.model.product.*;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;

@@ -1,15 +1,14 @@
 package com.algaworks.algashop.ordering.infrastructure.adapters.in.web.customer;
 
+import com.algaworks.algashop.ordering.core.application.customer.CustomerManagementApplicationService;
 import com.algaworks.algashop.ordering.core.application.customer.CustomerOutputTestDataBuilder;
 import com.algaworks.algashop.ordering.core.application.customer.CustomerSummaryOutputTestDataBuilder;
-import com.algaworks.algashop.ordering.core.ports.in.commons.AddressData;
-import com.algaworks.algashop.ordering.core.ports.in.customer.*;
-import com.algaworks.algashop.ordering.core.application.customer.CustomerManagementApplicationService;
-import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.algaworks.algashop.ordering.core.domain.model.DomainException;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerEmailIsInUseException;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
-import com.algaworks.algashop.ordering.infrastructure.adapters.in.web.customer.CustomerController;
+import com.algaworks.algashop.ordering.core.ports.in.commons.AddressData;
+import com.algaworks.algashop.ordering.core.ports.in.customer.*;
+import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +44,7 @@ class CustomerControllerContractTest {
     private ForQueryingShoppingCarts shoppingCartQueryService;
 
     @BeforeEach
-    void setupAll() {
+    public void setupAll() {
         RestAssuredMockMvc.mockMvc(MockMvcBuilders.webAppContextSetup(context)
                 .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
                 .build());
@@ -53,7 +52,7 @@ class CustomerControllerContractTest {
     }
 
     @Test
-    void createCustomerContract() {
+    public void createCustomerContract() {
         CustomerOutput customerOutput = CustomerOutputTestDataBuilder.existing().build();
 
         UUID customerId = UUID.randomUUID();
@@ -117,7 +116,7 @@ class CustomerControllerContractTest {
     }
 
     @Test
-    void createCustomerError400Contract() {
+    public void createCustomerError400Contract() {
         String jsonInput = """
         {
           "firstName": "",
@@ -162,7 +161,7 @@ class CustomerControllerContractTest {
     }
 
     @Test
-    void findCustomersContract() {
+    public void findCustomersContract() {
         int sizeLimit = 5;
         int pageNumber = 0;
 
@@ -219,7 +218,7 @@ class CustomerControllerContractTest {
     }
 
     @Test
-    void findByIdContract() {
+    public void findByIdContract() {
         CustomerOutput customer = CustomerOutputTestDataBuilder.existing().build();
 
         Mockito.when(customerQueryService.findById(customer.getId())).thenReturn(customer);
@@ -259,7 +258,7 @@ class CustomerControllerContractTest {
     }
 
     @Test
-    void findByIdError404Contract() {
+    public void findByIdError404Contract() {
         UUID invalidCustomerId = UUID.randomUUID();
 
         Mockito.when(customerQueryService.findById(invalidCustomerId))
@@ -284,7 +283,7 @@ class CustomerControllerContractTest {
     }
 
     @Test
-    void createCustomerError409Contract() {
+    public void createCustomerError409Contract() {
         Mockito.when(customerManagementApplicationService.create(Mockito.any(CustomerInput.class)))
                 .thenThrow(CustomerEmailIsInUseException.class);
 
@@ -329,7 +328,7 @@ class CustomerControllerContractTest {
     }
 
     @Test
-    void createCustomerError422Contract() {
+    public void createCustomerError422Contract() {
         Mockito.when(customerManagementApplicationService.create(Mockito.any(CustomerInput.class)))
                 .thenThrow(DomainException.class);
 
@@ -374,7 +373,7 @@ class CustomerControllerContractTest {
     }
 
     @Test
-    void createCustomerError500Contract() {
+    public void createCustomerError500Contract() {
         Mockito.when(customerManagementApplicationService.create(Mockito.any(CustomerInput.class)))
                 .thenThrow(RuntimeException.class);
 
@@ -419,7 +418,7 @@ class CustomerControllerContractTest {
     }
 
     @Test
-    void updateCustomerContract() {
+    public void updateCustomerContract() {
         CustomerOutput customer = CustomerOutputTestDataBuilder.existing().build();
         DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
         AddressData address = customer.getAddress();
@@ -483,7 +482,7 @@ class CustomerControllerContractTest {
     }
 
     @Test
-    void deleteCustomerContract() {
+    public void deleteCustomerContract() {
         CustomerOutput customer = CustomerOutputTestDataBuilder.existing().build();
 
         UUID customerId = UUID.randomUUID();

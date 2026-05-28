@@ -2,10 +2,6 @@ package com.algaworks.algashop.ordering.core.application.customer;
 
 import com.algaworks.algashop.ordering.core.domain.model.commons.*;
 import com.algaworks.algashop.ordering.core.domain.model.customer.*;
-import com.algaworks.algashop.ordering.core.ports.in.commons.AddressData;
-import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerInput;
-import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerUpdateInput;
-import com.algaworks.algashop.ordering.core.ports.in.customer.ForManagingCustomers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +52,7 @@ public class CustomerManagementApplicationService implements ForManagingCustomer
         Objects.requireNonNull(rawCustomerId);
 
         Customer customer = customers.ofId(new CustomerId(rawCustomerId))
-                .orElseThrow(CustomerNotFoundException::new);
+                .orElseThrow(() -> new CustomerNotFoundException());
 
         customer.changeName(new FullName(input.getFirstName(), input.getLastName()));
         customer.changePhone(new Phone(input.getPhone()));
@@ -87,7 +83,7 @@ public class CustomerManagementApplicationService implements ForManagingCustomer
     public void archive(UUID rawCustomerId) {
         CustomerId customerId = new CustomerId(rawCustomerId);
         Customer customer = customers.ofId(new CustomerId(rawCustomerId))
-                .orElseThrow(CustomerNotFoundException::new);
+                .orElseThrow(()-> new CustomerNotFoundException());
         customer.archive();
         customers.add(customer);
     }
@@ -97,7 +93,7 @@ public class CustomerManagementApplicationService implements ForManagingCustomer
     public void changeEmail(UUID rawCustomerId, String newEmail) {
         CustomerId customerId = new CustomerId(rawCustomerId);
         Customer customer = customers.ofId(new CustomerId(rawCustomerId))
-                .orElseThrow(CustomerNotFoundException::new);
+                .orElseThrow(()-> new CustomerNotFoundException());
         customerRegistration.changeEmail(customer, new Email(newEmail));
         customers.add(customer);
     }

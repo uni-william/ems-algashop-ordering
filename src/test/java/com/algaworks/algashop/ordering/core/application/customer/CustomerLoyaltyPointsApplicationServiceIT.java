@@ -1,11 +1,11 @@
 package com.algaworks.algashop.ordering.core.application.customer;
 
 import com.algaworks.algashop.ordering.core.application.AbstractApplicationIT;
-import com.algaworks.algashop.ordering.core.domain.model.customer.*;
-import com.algaworks.algashop.ordering.core.domain.model.order.*;
 import com.algaworks.algashop.ordering.core.domain.model.commons.Email;
 import com.algaworks.algashop.ordering.core.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.core.domain.model.commons.Quantity;
+import com.algaworks.algashop.ordering.core.domain.model.customer.*;
+import com.algaworks.algashop.ordering.core.domain.model.order.*;
 import com.algaworks.algashop.ordering.core.domain.model.product.Product;
 import com.algaworks.algashop.ordering.core.domain.model.product.ProductTestDataBuilder;
 import com.algaworks.algashop.ordering.infrastructure.adapters.in.listener.customer.CustomerEventListener;
@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-
 import java.util.UUID;
 
-class CustomerLoyaltyPointsApplicationServiceIT extends AbstractApplicationIT {
+class CustomerLoyaltyPointsApplicationServiceIT
+        extends AbstractApplicationIT {
 
     @Autowired
     private CustomerLoyaltyPointsApplicationService loyaltyPointsService;

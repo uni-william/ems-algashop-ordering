@@ -30,8 +30,9 @@ public class ProductCatalogServiceHttpImpl implements ProductCatalogService {
         } catch (HttpClientErrorException.NotFound e) {
             return Optional.empty();
         } catch (HttpClientErrorException e) {
-        throw new BadGatewayException("Product Catalog API Bad Gateway", e);
+            throw new BadGatewayException("Product Catalog API Bad Gateway", e);
         }
+
         return Optional.of(
                 Product.builder()
                         .id(new ProductId(productResponse.getId()))

@@ -1,25 +1,21 @@
 package com.algaworks.algashop.ordering.core.application.customer;
 
 import com.algaworks.algashop.ordering.core.application.AbstractApplicationIT;
-import com.algaworks.algashop.ordering.core.ports.out.customer.ForNotifyingCustomers;
-import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerOutput;
-import com.algaworks.algashop.ordering.core.ports.in.customer.ForQueryingCustomers;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerArchivedEvent;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerArchivedException;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerRegisteredEvent;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerInput;
+import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerOutput;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerUpdateInput;
+import com.algaworks.algashop.ordering.core.ports.in.customer.ForQueryingCustomers;
+import com.algaworks.algashop.ordering.core.ports.out.customer.ForNotifyingCustomers;
 import com.algaworks.algashop.ordering.infrastructure.adapters.in.listener.customer.CustomerEventListener;
 import org.assertj.core.api.Assertions;
-
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-
-
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -48,19 +44,19 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
         CustomerOutput customerOutput = queryService.findById(customerId);
 
         Assertions.assertThat(customerOutput)
-                .extracting(
-                        CustomerOutput::getId,
-                        CustomerOutput::getFirstName,
-                        CustomerOutput::getLastName,
-                        CustomerOutput::getEmail,
-                        CustomerOutput::getBirthDate
-                ).containsExactly(
-                        customerId,
-                        "John",
-                        "Doe",
-                        "johndoe@email.com",
-                        LocalDate.of(1991, 7,5)
-                );
+            .extracting(
+                    CustomerOutput::getId,
+                    CustomerOutput::getFirstName,
+                    CustomerOutput::getLastName,
+                    CustomerOutput::getEmail,
+                    CustomerOutput::getBirthDate
+            ).containsExactly(
+                    customerId,
+                    "John",
+                    "Doe",
+                    "johndoe@email.com",
+                    LocalDate.of(1991, 7,5)
+            );
 
         Assertions.assertThat(customerOutput.getRegisteredAt()).isNotNull();
 
@@ -87,18 +83,18 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
         CustomerOutput customerOutput = queryService.findById(customerId);
 
         Assertions.assertThat(customerOutput)
-                .extracting(
-                        CustomerOutput::getId,
-                        CustomerOutput::getFirstName,
-                        CustomerOutput::getLastName,
-                        CustomerOutput::getEmail,
-                        CustomerOutput::getBirthDate
-                ).containsExactly(
-                        customerId,
-                        "Matt",
-                        "Damon",
-                        "johndoe@email.com",
-                        LocalDate.of(1991, 7,5)
+            .extracting(
+                    CustomerOutput::getId,
+                    CustomerOutput::getFirstName,
+                    CustomerOutput::getLastName,
+                    CustomerOutput::getEmail,
+                    CustomerOutput::getBirthDate
+            ).containsExactly(
+                    customerId,
+                    "Matt",
+                    "Damon",
+                    "johndoe@email.com",
+                    LocalDate.of(1991, 7,5)
                 );
 
         Assertions.assertThat(customerOutput.getRegisteredAt()).isNotNull();

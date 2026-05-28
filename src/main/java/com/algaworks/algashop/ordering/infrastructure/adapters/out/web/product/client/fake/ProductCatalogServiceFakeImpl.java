@@ -8,7 +8,7 @@ import com.algaworks.algashop.ordering.core.domain.model.product.ProductId;
 
 import java.util.Optional;
 
-// @Component
+//@Component
 public class ProductCatalogServiceFakeImpl implements ProductCatalogService {
     @Override
     public Optional<Product> ofId(ProductId productId) {

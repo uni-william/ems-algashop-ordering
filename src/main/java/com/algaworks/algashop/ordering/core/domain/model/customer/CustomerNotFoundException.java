@@ -4,7 +4,6 @@ import com.algaworks.algashop.ordering.core.domain.model.DomainEntityNotFoundExc
 import com.algaworks.algashop.ordering.core.domain.model.ErrorMessages;
 
 public class CustomerNotFoundException extends DomainEntityNotFoundException {
-
     public CustomerNotFoundException() {
     }
 

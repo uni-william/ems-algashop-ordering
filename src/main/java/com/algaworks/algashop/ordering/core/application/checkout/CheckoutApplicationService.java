@@ -19,7 +19,8 @@ import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCa
 import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCarts;
 import com.algaworks.algashop.ordering.core.ports.in.checkout.CheckoutInput;
-import com.algaworks.algashop.ordering.core.ports.in.order.ShippingInput;
+import com.algaworks.algashop.ordering.core.ports.in.checkout.ForBuyingWithShoppingCart;
+import com.algaworks.algashop.ordering.core.ports.in.checkout.ShippingInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class CheckoutApplicationService {
+public class CheckoutApplicationService implements ForBuyingWithShoppingCart {
 
 	private final Orders orders;
 	private final ShoppingCarts shoppingCarts;
@@ -47,6 +48,7 @@ public class CheckoutApplicationService {
 	public String checkout(CheckoutInput input) {
 		Objects.requireNonNull(input);
 		PaymentMethod paymentMethod = PaymentMethod.valueOf(input.getPaymentMethod());
+
 		CreditCardId creditCardId = null;
 
 		if (paymentMethod.equals(PaymentMethod.CREDIT_CARD)) {
@@ -58,9 +60,9 @@ public class CheckoutApplicationService {
 
 		ShoppingCartId shoppingCartId = new ShoppingCartId(input.getShoppingCartId());
 		ShoppingCart shoppingCart = shoppingCarts.ofId(shoppingCartId)
-				.orElseThrow(ShoppingCartNotFoundException::new);
+				.orElseThrow(() -> new ShoppingCartNotFoundException(shoppingCartId.value()));
 
-		Customer customer = customers.ofId(shoppingCart.customerId()).orElseThrow(CustomerNotFoundException::new);
+		Customer customer = customers.ofId(shoppingCart.customerId()).orElseThrow(() -> new CustomerNotFoundException());
 
 		var shippingCalculationResult = calculateShippingCost(input.getShipping());
 
@@ -83,7 +85,7 @@ public class CheckoutApplicationService {
 
 	private Product findProduct(ProductId productId) {
 		return productCatalogService.ofId(productId)
-				.orElseThrow(ProductNotFoundException::new);
+				.orElseThrow(()-> new ProductNotFoundException());
 	}
 
 }

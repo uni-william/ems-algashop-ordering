@@ -4,21 +4,19 @@ package com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.
 import com.algaworks.algashop.ordering.core.domain.model.order.Order;
 import com.algaworks.algashop.ordering.core.domain.model.order.OrderStatus;
 import com.algaworks.algashop.ordering.core.domain.model.order.OrderTestDataBuilder;
+import com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.AbstractPersistenceIT;
 import com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityAssembler;
+import com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityDisassembler;
 import com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomersPersistenceProvider;
 import com.algaworks.algashop.ordering.infrastructure.config.auditing.SpringDataAuditingConfig;
-import com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityDisassembler;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@DataJpaTest
 @Import({
         OrdersPersistenceProvider.class,
         OrderPersistenceEntityAssembler.class,
@@ -28,9 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
         CustomerPersistenceEntityDisassembler.class,
         SpringDataAuditingConfig.class
 })
-@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = "spring.flyway.locations=classpath:db/migration,classpath:db/testdata")
-class OrdersPersistenceProviderIT {
+class OrdersPersistenceProviderIT extends AbstractPersistenceIT {
 
     private OrdersPersistenceProvider persistenceProvider;
     private OrderPersistenceEntityRepository entityRepository;
@@ -43,7 +40,7 @@ class OrdersPersistenceProviderIT {
     }
 
     @Test
-    void shouldUpdateAndKeepPersistenceEntityState() {
+    public void shouldUpdateAndKeepPersistenceEntityState() {
         Order order = OrderTestDataBuilder.anOrder().status(OrderStatus.PLACED).build();
         long orderId = order.id().value().toLong();
         persistenceProvider.add(order);
@@ -72,7 +69,7 @@ class OrdersPersistenceProviderIT {
 
     @Test
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
-    void shouldAddFindAndNotFailWhenNoTransaction() {
+    public void shouldAddFindAndNotFailWhenNoTransaction() {
         Order order = OrderTestDataBuilder.anOrder().build();
         persistenceProvider.add(order);
 

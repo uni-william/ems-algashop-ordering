@@ -3,7 +3,6 @@ package com.algaworks.algashop.ordering.core.domain.model.customer;
 import com.algaworks.algashop.ordering.core.domain.model.AbstractEventSourceEntity;
 import com.algaworks.algashop.ordering.core.domain.model.AggregateRoot;
 import com.algaworks.algashop.ordering.core.domain.model.commons.*;
-
 import lombok.Builder;
 
 import java.time.OffsetDateTime;

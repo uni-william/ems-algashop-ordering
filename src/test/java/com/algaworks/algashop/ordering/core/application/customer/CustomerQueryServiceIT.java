@@ -9,16 +9,16 @@ import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerTestDa
 import com.algaworks.algashop.ordering.core.domain.model.customer.Customers;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerFilter;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerOutput;
-import com.algaworks.algashop.ordering.core.ports.in.customer.ForQueryingCustomers;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerSummaryOutput;
+import com.algaworks.algashop.ordering.core.ports.in.customer.ForQueryingCustomers;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
-
 class CustomerQueryServiceIT extends AbstractApplicationIT {
+
     @Autowired
     private ForQueryingCustomers queryService;
 

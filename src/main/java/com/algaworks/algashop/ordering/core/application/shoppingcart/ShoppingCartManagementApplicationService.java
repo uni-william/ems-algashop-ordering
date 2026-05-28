@@ -1,15 +1,6 @@
 package com.algaworks.algashop.ordering.core.application.shoppingcart;
 
-import com.algaworks.algashop.ordering.core.domain.model.commons.Quantity;
-import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerId;
-import com.algaworks.algashop.ordering.core.domain.model.product.Product;
-import com.algaworks.algashop.ordering.core.domain.model.product.ProductCatalogService;
-import com.algaworks.algashop.ordering.core.domain.model.product.ProductId;
-import com.algaworks.algashop.ordering.core.domain.model.product.ProductNotFoundException;
 import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.*;
-
-import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForManagingShoppingCarts;
-import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartItemInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +24,7 @@ public class ShoppingCartManagementApplicationService implements ForManagingShop
 		ProductId productId = new ProductId(input.getProductId());
 
 		ShoppingCart shoppingCart = shoppingCarts.ofId(shoppingCartId)
-				.orElseThrow(()-> new ShoppingCartNotFoundException());
+				.orElseThrow(()-> new ShoppingCartNotFoundException(shoppingCartId.value()));
 
 		Product product = productCatalogService.ofId(productId)
 				.orElseThrow(()-> new ProductNotFoundException(productId));
@@ -59,7 +50,7 @@ public class ShoppingCartManagementApplicationService implements ForManagingShop
 		Objects.requireNonNull(rawShoppingCartItemId);
 		ShoppingCartId shoppingCartId = new ShoppingCartId(rawShoppingCartId);
 		ShoppingCart shoppingCart = shoppingCarts.ofId(shoppingCartId)
-				.orElseThrow(()-> new ShoppingCartNotFoundException());
+				.orElseThrow(()-> new ShoppingCartNotFoundException(rawShoppingCartId));
 		shoppingCart.removeItem(new ShoppingCartItemId(rawShoppingCartItemId));
 		shoppingCarts.add(shoppingCart);
 	}
@@ -70,7 +61,7 @@ public class ShoppingCartManagementApplicationService implements ForManagingShop
 		Objects.requireNonNull(rawShoppingCartId);
 		ShoppingCartId shoppingCartId = new ShoppingCartId(rawShoppingCartId);
 		ShoppingCart shoppingCart = shoppingCarts.ofId(shoppingCartId)
-				.orElseThrow(()-> new ShoppingCartNotFoundException());
+				.orElseThrow(()-> new ShoppingCartNotFoundException(rawShoppingCartId));
 		shoppingCart.empty();
 		shoppingCarts.add(shoppingCart);
 	}
@@ -81,7 +72,7 @@ public class ShoppingCartManagementApplicationService implements ForManagingShop
 		Objects.requireNonNull(rawShoppingCartId);
 		ShoppingCartId shoppingCartId = new ShoppingCartId(rawShoppingCartId);
 		ShoppingCart shoppingCart = shoppingCarts.ofId(shoppingCartId)
-				.orElseThrow(()-> new ShoppingCartNotFoundException());
+				.orElseThrow(()-> new ShoppingCartNotFoundException(rawShoppingCartId));
 		shoppingCarts.remove(shoppingCart);
 	}
 

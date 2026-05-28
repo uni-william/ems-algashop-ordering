@@ -1,11 +1,11 @@
 package com.algaworks.algashop.ordering.infrastructure.adapters.in.web.shoppingcart;
 
-import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForManagingShoppingCarts;
-import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartItemInput;
-import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartOutput;
-import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.core.domain.model.product.ProductNotFoundException;
+import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForManagingShoppingCarts;
+import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
+import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartItemInput;
+import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartOutput;
 import com.algaworks.algashop.ordering.infrastructure.adapters.in.web.exceptionhandler.UnprocessableEntityException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +26,12 @@ public class ShoppingCartController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public ShoppingCartOutput create(@RequestBody @Valid ShoppingCartInput input) {
 		UUID shoppingCartId;
-		try {
+        try {
 			shoppingCartId = forManagingShoppingCarts.createNew(input.getCustomerId());
 		} catch (CustomerNotFoundException e) {
 			throw new UnprocessableEntityException(e.getMessage(), e);
 		}
-		return forQueryingShoppingCarts.findById(shoppingCartId);
+        return forQueryingShoppingCarts.findById(shoppingCartId);
 	}
 
 	@GetMapping("/{shoppingCartId}")
@@ -62,7 +62,7 @@ public class ShoppingCartController {
 	public void addItem(@PathVariable UUID shoppingCartId,
 		   			    @RequestBody @Valid ShoppingCartItemInput input) {
 		input.setShoppingCartId(shoppingCartId);
-		try{
+		try {
 			forManagingShoppingCarts.addItem(input);
 		} catch (ProductNotFoundException e) {
 			throw new UnprocessableEntityException(e.getMessage(), e);

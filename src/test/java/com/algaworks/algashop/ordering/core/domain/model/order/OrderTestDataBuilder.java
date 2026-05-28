@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.core.domain.model.order;
 
 import com.algaworks.algashop.ordering.core.domain.model.commons.*;
-import com.algaworks.algashop.ordering.core.domain.model.product.ProductTestDataBuilder;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerId;
+import com.algaworks.algashop.ordering.core.domain.model.product.ProductTestDataBuilder;
 
 import java.time.LocalDate;
 

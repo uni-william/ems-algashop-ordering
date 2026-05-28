@@ -1,7 +1,5 @@
 package com.algaworks.algashop.ordering.core.domain.model.customer;
 
-import com.algaworks.algashop.ordering.core.domain.model.order.Order;
-import com.algaworks.algashop.ordering.core.domain.model.order.OrderNotBelongsToCustomerException;
 import com.algaworks.algashop.ordering.core.domain.model.DomainService;
 import com.algaworks.algashop.ordering.core.domain.model.commons.Money;
 

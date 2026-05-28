@@ -17,7 +17,6 @@ public class CustomerQueryService implements ForQueryingCustomers {
 
     private final ForObtainingCustomers forObtainingCustomers;
 
-
     @Override
     public CustomerOutput findById(UUID customerId) {
         return forObtainingCustomers.findById(customerId);

@@ -2,8 +2,8 @@ package com.algaworks.algashop.ordering.contract.base;
 
 import com.algaworks.algashop.ordering.core.application.shoppingcart.ShoppingCartManagementApplicationService;
 import com.algaworks.algashop.ordering.core.application.shoppingcart.ShoppingCartOutputTestDataBuilder;
-import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
+import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.algaworks.algashop.ordering.infrastructure.adapters.in.web.shoppingcart.ShoppingCartController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ public class ShoppingCartBase {
     @MockitoBean
     private ForQueryingShoppingCarts queryService;
 
-    public static final UUID validShoppingCartId = UUID.fromString("4f31582a-66e6-4601-a9d3-ff608c2d4461");
+    public static final UUID validShoppingCartId = UUID.fromString("ad265aa3-c77d-46e9-9782-b70c487c1e17");
 
     public static final UUID notFoundShoppingCartId = UUID.fromString("e2103964-5353-4910-81ee-212a40a2ca70");
 
@@ -47,7 +47,7 @@ public class ShoppingCartBase {
                 .thenReturn(ShoppingCartOutputTestDataBuilder.aShoppingCart().id(validShoppingCartId).build());
 
         Mockito.when(queryService.findById(notFoundShoppingCartId))
-                .thenThrow(new ShoppingCartNotFoundException());
+                .thenThrow(new ShoppingCartNotFoundException(notFoundShoppingCartId));
 
         Mockito.when(managementService.createNew(Mockito.any(UUID.class)))
                 .thenReturn(validShoppingCartId);

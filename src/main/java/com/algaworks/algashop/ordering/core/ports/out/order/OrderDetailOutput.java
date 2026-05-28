@@ -29,9 +29,9 @@ public class OrderDetailOutput {
     private String status;
     private String paymentMethod;
     private UUID creditCardId;
-    private BigDecimal creditAmount;
     private ShippingData shipping;
     private BillingData billing;
 
+    @Builder.Default
     private List<OrderItemDetailOutput> items = new ArrayList<>();
 }

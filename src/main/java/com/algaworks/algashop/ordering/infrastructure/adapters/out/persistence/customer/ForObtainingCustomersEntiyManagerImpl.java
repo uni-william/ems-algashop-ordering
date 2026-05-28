@@ -1,9 +1,9 @@
 package com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.customer;
 
+import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerFilter;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerOutput;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerSummaryOutput;
-import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
 import com.algaworks.algashop.ordering.core.ports.out.customer.ForObtainingCustomers;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -24,7 +24,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ForObtainingCustomersEntityManagerImpl implements ForObtainingCustomers {
+public class ForObtainingCustomersEntiyManagerImpl implements ForObtainingCustomers {
 
     private final EntityManager entityManager;
 
