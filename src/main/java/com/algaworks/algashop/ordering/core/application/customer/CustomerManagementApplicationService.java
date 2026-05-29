@@ -2,6 +2,10 @@ package com.algaworks.algashop.ordering.core.application.customer;
 
 import com.algaworks.algashop.ordering.core.domain.model.commons.*;
 import com.algaworks.algashop.ordering.core.domain.model.customer.*;
+import com.algaworks.algashop.ordering.core.ports.in.commons.AddressData;
+import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerInput;
+import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerUpdateInput;
+import com.algaworks.algashop.ordering.core.ports.in.customer.ForManagingCustomers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
