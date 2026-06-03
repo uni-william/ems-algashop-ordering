@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.infrastructure.adapters.out.web.shipping
 
 import com.algaworks.algashop.ordering.core.domain.model.order.shipping.ShippingCostService;
 import com.algaworks.algashop.ordering.core.domain.model.commons.Money;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @ConditionalOnProperty(name = "algashop.integrations.shipping.provider", havingValue = "RAPIDEX")
 public class ShippingCostServiceRapidexImpl implements ShippingCostService {
 
-    private final RapiDexAPIClient rapiDexAPIClient;
+    private final ResilientRapiDexAPIClient rapiDexAPIClient;
 
     @Override
     public CalculationResult calculate(CalculationRequest request) {
