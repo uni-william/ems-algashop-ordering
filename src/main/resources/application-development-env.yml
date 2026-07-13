@@ -20,9 +20,29 @@ spring:
       password: algashop
       database: 1
       timeout: 600
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${algashop.integrations.authorization-server.url}
+      client:
+        provider:
+          algashop-as:
+            token-uri: ${algashop.integrations.authorization-server.url}/oauth2/token
+        registration:
+          algashop-ordering-service-client:
+            provider: algashop-as
+            client-id: algashop-ordering-service
+            client-secret: secret123
+            authorization-grant-type: client_credentials
+            client-authentication-method: client_secret_basic
+            scope: products:read
 
 algashop:
   integrations:
+    authorization-server.url: http://auth.algashop.local:8081
     shipping.provider: RAPIDEX
     rapidex.url: http://localhost:8787
-    product-catalog.url: http://localhost:8083
+    product-catalog:
+      url: http://localhost:8083
+      oauth2-client-registration-id: algashop-ordering-service-client
