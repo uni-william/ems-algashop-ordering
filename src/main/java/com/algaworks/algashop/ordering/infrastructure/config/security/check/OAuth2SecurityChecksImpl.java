@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.infrastructure.config.security.check;
 
-import com.algaworks.algashop.ordering.core.application.security.SecurityCheckApplicationService;
+import com.algaworks.algashop.ordering.core.application.security.SecurityChecks;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -8,11 +8,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.UUID;
 
-@Service("securityCheck")
+@Service("securityChecks")
 @Slf4j
-public class OAuth2SecurityCheckApplicationServiceImpl implements SecurityCheckApplicationService {
+public class OAuth2SecurityChecksImpl implements SecurityChecks {
+
+    private static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
 
     @Override
     public UUID getAuthenticatedUserId() {
@@ -50,6 +53,32 @@ public class OAuth2SecurityCheckApplicationServiceImpl implements SecurityCheckA
         }
 
         return jwt.getAudience().contains(jwt.getSubject());
+    }
+
+    @Override
+    public boolean isCustomer() {
+        return hasAuthority(ROLE_CUSTOMER);
+    }
+
+    @Override
+    public boolean canOrderFor(UUID customerId) {
+        if (customerId == null) {
+            return false;
+        }
+        return isCustomer() && getAuthenticatedUserId().equals(customerId);
+    }
+
+    private boolean hasAuthority(String rawAuthority) {
+        Authentication authentication;
+        try {
+            authentication = getAuthentication();
+        } catch (IllegalStateException e) {
+            log.debug(e.getMessage(), e);
+            return false;
+        }
+
+        return authentication.getAuthorities()
+                .stream().anyMatch(a -> Objects.equals(a.getAuthority(), rawAuthority));
     }
 
     private Jwt getJwt() {

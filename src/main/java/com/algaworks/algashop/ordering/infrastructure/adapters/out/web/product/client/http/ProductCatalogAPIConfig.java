@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.infrastructure.adapters.out.web.product.client.http;
 
-import jakarta.validation.constraints.NotBlank;
+
 import org.jspecify.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -24,36 +24,40 @@ public class ProductCatalogAPIConfig {
     @Bean
     public ProductCatalogAPIClient productCatalogAPIClient(RestClient.Builder builder,
                                                            ProductCatalogIntegrationProperties properties,
-                                                           OAuth2AuthorizedClientManager manager) {
-
-        var interceptor = new OAuth2ClientHttpRequestInterceptor(manager);
-        interceptor.setClientRegistrationIdResolver(_ -> properties.getOauth2ClientRegistrationId());
-        interceptor.setPrincipalResolver(_ -> generatePrinciapl(properties.getOauth2ClientRegistrationId()));
+                                                           @Qualifier("productCatalogAPIClientInterceptor") OAuth2ClientHttpRequestInterceptor interceptor) {
 
         RestClient restClient = builder.baseUrl(properties.getUrl())
                 .requestFactory(generateClientHttpRequestFactory())
                 .requestInterceptor(interceptor)
                 .build();
+
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory.builderFor(adapter).build();
         return proxyFactory.createClient(ProductCatalogAPIClient.class);
     }
 
-    private Authentication generatePrinciapl(String princiaplName) {
-        return new AbstractAuthenticationToken(Collections.emptySet()) {
+    @Bean("productCatalogAPIClientInterceptor")
+    public OAuth2ClientHttpRequestInterceptor productCatalogAPIClientInterceptor(
+            ProductCatalogIntegrationProperties properties,
+            OAuth2AuthorizedClientManager manager) {
+        var interceptor = new OAuth2ClientHttpRequestInterceptor(manager);
+        interceptor.setClientRegistrationIdResolver(_ -> properties.getOauth2ClientRegistrationId());
+        interceptor.setPrincipalResolver(_ -> generatePrincipal(properties.getOauth2ClientRegistrationId()));
+        return interceptor;
+    }
 
+    private Authentication generatePrincipal(String principalName) {
+        return new AbstractAuthenticationToken(Collections.emptySet()) {
             @Override
             public @Nullable Object getPrincipal() {
-                return princiaplName;
+                return principalName;
             }
 
             @Override
             public @Nullable Object getCredentials() {
                 return null;
             }
-
         };
-
     }
 
     private ClientHttpRequestFactory generateClientHttpRequestFactory() {
