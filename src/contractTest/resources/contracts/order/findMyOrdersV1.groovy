@@ -5,7 +5,7 @@ import org.springframework.cloud.contract.spec.Contract
 Contract.make {
     request {
         method GET()
-        urlPath("/api/v1/orders") {
+        urlPath("/api/v1/customers/me/orders") {
             queryParameters {
                 parameter("page", "0")
                 parameter("size", "10")

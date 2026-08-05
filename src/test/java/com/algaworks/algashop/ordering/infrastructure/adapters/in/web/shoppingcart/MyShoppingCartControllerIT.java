@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 
 import java.util.UUID;
 
-public class ShoppingCartControllerIT extends AbstractPresentationIT {
+public class MyShoppingCartControllerIT extends AbstractPresentationIT {
 
     @Autowired
     private CustomerPersistenceEntityRepository customerRepository;

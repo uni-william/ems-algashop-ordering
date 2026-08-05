@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -49,6 +50,13 @@ public class ForObtainingOrdersJpaRepositoryImpl implements ForObtainingOrders {
         }
 
         return filterQuery(filter, totalQueryResults);
+    }
+
+    @Override
+    public OrderDetailOutput findByIdAndCustomerId(String id, UUID customerId) {
+        OrderPersistenceEntity entity = repository.findByIdAndCustomerId(new OrderId(id).value().toLong(), customerId)
+                .orElseThrow(() -> new OrderNotFoundException());
+        return mapper.convert(entity, OrderDetailOutput.class);
     }
 
     private Long countTotalQueryResults(OrderFilter filter) {
@@ -94,7 +102,7 @@ public class ForObtainingOrdersJpaRepositoryImpl implements ForObtainingOrders {
                                 customer.get("document"),
                                 customer.get("phone")
                         )
-                    )
+                )
         );
         Predicate[] predicates = toPredicates(builder, root, filter);
         Order sortOrder = toSortOrder(builder, root, filter);

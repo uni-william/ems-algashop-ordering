@@ -8,7 +8,7 @@ Contract.make {
         headers {
             accept 'application/json'
         }
-        url("/api/v1/orders/01226N0640J7Q")
+        url("/api/v1/customers/me/orders/01226N0640J7Q")
     }
     response {
         status 200

@@ -4,7 +4,7 @@ import com.algaworks.algashop.ordering.core.application.shoppingcart.ShoppingCar
 import com.algaworks.algashop.ordering.core.application.shoppingcart.ShoppingCartOutputTestDataBuilder;
 import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.algaworks.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
-import com.algaworks.algashop.ordering.infrastructure.adapters.in.web.shoppingcart.ShoppingCartController;
+import com.algaworks.algashop.ordering.infrastructure.adapters.in.web.shoppingcart.MyShoppingCartController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
@@ -17,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-@WebMvcTest(controllers = ShoppingCartController.class)
+@WebMvcTest(controllers = MyShoppingCartController.class)
 public class ShoppingCartBase {
 
     @Autowired

@@ -1,10 +1,7 @@
 package com.algaworks.algashop.ordering.core.application.customer;
 
 import com.algaworks.algashop.ordering.core.application.AbstractApplicationIT;
-import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerArchivedEvent;
-import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerArchivedException;
-import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
-import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerRegisteredEvent;
+import com.algaworks.algashop.ordering.core.domain.model.customer.*;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerInput;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerOutput;
 import com.algaworks.algashop.ordering.core.ports.in.customer.CustomerUpdateInput;
@@ -38,25 +35,25 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     public void shouldRegister() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
 
-        UUID customerId = customerManagementApplicationService.create(input);
+        UUID customerId = customerManagementApplicationService.create(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID.value(),input);
         Assertions.assertThat(customerId).isNotNull();
 
         CustomerOutput customerOutput = queryService.findById(customerId);
 
         Assertions.assertThat(customerOutput)
-            .extracting(
-                    CustomerOutput::getId,
-                    CustomerOutput::getFirstName,
-                    CustomerOutput::getLastName,
-                    CustomerOutput::getEmail,
-                    CustomerOutput::getBirthDate
-            ).containsExactly(
-                    customerId,
-                    "John",
-                    "Doe",
-                    "johndoe@email.com",
-                    LocalDate.of(1991, 7,5)
-            );
+                .extracting(
+                        CustomerOutput::getId,
+                        CustomerOutput::getFirstName,
+                        CustomerOutput::getLastName,
+                        CustomerOutput::getEmail,
+                        CustomerOutput::getBirthDate
+                ).containsExactly(
+                        customerId,
+                        "John",
+                        "Doe",
+                        "johndoe@email.com",
+                        LocalDate.of(1991, 7,5)
+                );
 
         Assertions.assertThat(customerOutput.getRegisteredAt()).isNotNull();
 
@@ -75,7 +72,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
         CustomerUpdateInput updateInput = CustomerUpdateInputTestDataBuilder.aCustomerUpdate().build();
 
-        UUID customerId = customerManagementApplicationService.create(input);
+        UUID customerId = customerManagementApplicationService.create(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID.value(),input);
         Assertions.assertThat(customerId).isNotNull();
 
         customerManagementApplicationService.update(customerId, updateInput);
@@ -83,18 +80,18 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
         CustomerOutput customerOutput = queryService.findById(customerId);
 
         Assertions.assertThat(customerOutput)
-            .extracting(
-                    CustomerOutput::getId,
-                    CustomerOutput::getFirstName,
-                    CustomerOutput::getLastName,
-                    CustomerOutput::getEmail,
-                    CustomerOutput::getBirthDate
-            ).containsExactly(
-                    customerId,
-                    "Matt",
-                    "Damon",
-                    "johndoe@email.com",
-                    LocalDate.of(1991, 7,5)
+                .extracting(
+                        CustomerOutput::getId,
+                        CustomerOutput::getFirstName,
+                        CustomerOutput::getLastName,
+                        CustomerOutput::getEmail,
+                        CustomerOutput::getBirthDate
+                ).containsExactly(
+                        customerId,
+                        "Matt",
+                        "Damon",
+                        "johndoe@email.com",
+                        LocalDate.of(1991, 7,5)
                 );
 
         Assertions.assertThat(customerOutput.getRegisteredAt()).isNotNull();
@@ -103,7 +100,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     @Test
     public void shouldArchiveCustomer() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = customerManagementApplicationService.create(input);
+        UUID customerId = customerManagementApplicationService.create(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID.value(),input);
         Assertions.assertThat(customerId).isNotNull();
 
         customerManagementApplicationService.archive(customerId);
@@ -148,7 +145,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     @Test
     public void shouldThrowCustomerArchivedExceptionWhenArchivingAlreadyArchivedCustomer() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = customerManagementApplicationService.create(input);
+        UUID customerId = customerManagementApplicationService.create(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID.value(),input);
         Assertions.assertThat(customerId).isNotNull();
 
         customerManagementApplicationService.archive(customerId);
