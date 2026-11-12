@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart;
 
+import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -7,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,4 +58,6 @@ public interface ShoppingCartPersistenceEntityRepository extends JpaRepository<S
 				AND i2.productId = :productId)
 		""")
 	void recalculateTotalsForCartsWithProduct(@Param("productId") UUID productId);
+
+    List<ShoppingCartPersistenceEntity> findAllByItems_productId(UUID productId);
 }

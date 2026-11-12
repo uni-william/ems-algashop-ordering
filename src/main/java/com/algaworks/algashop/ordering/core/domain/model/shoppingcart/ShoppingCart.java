@@ -128,6 +128,18 @@ public class ShoppingCart
         this.recalculateTotals();
     }
 
+    public void changeItemAvailability(ProductId productId, boolean available) {
+        ShoppingCartItem shoppingCartItem = this.findItem(productId);
+        shoppingCartItem.changeAvailability(available);
+
+    }
+
+    public void changeItemPrice(ProductId productId, Money price) {
+        ShoppingCartItem shoppingCartItem = this.findItem(productId);
+        shoppingCartItem.changeItemPrice(price);
+        this.recalculateTotals();
+    }
+
     public boolean containsUnavailableItems() {
         return items.stream().anyMatch(i -> !i.isAvailable());
     }
@@ -163,6 +175,7 @@ public class ShoppingCart
     public Long version() {
         return version;
     }
+
 
     private void updateItem(ShoppingCartItem shoppingCartItem, Product product, Quantity quantity) {
         shoppingCartItem.refresh(product);
@@ -239,4 +252,6 @@ public class ShoppingCart
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 }

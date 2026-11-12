@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart;
 
+import com.algaworks.algashop.ordering.core.domain.model.product.ProductId;
 import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart;
 import com.algaworks.algashop.ordering.core.domain.model.shoppingcart.ShoppingCarts;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerId;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -91,5 +93,13 @@ public class ShoppingCartsPersistenceProvider implements ShoppingCarts {
 	public Optional<ShoppingCart> ofCustomer(CustomerId customerId) {
 		return persistenceRepository.findByCustomer_Id(customerId.value())
 				.map(disassembler::toDomainEntity);
+	}
+
+	@Override
+	public List<ShoppingCart> findAllContainingItem(ProductId productId) {
+		return persistenceRepository.findAllByItems_productId(productId.value())
+				.stream()
+				.map(disassembler::toDomainEntity)
+				.toList();
 	}
 }

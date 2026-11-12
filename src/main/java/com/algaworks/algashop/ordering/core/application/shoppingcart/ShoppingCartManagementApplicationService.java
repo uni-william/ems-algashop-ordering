@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.core.application.shoppingcart;
 
+import com.algaworks.algashop.ordering.core.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.core.domain.model.commons.Quantity;
 import com.algaworks.algashop.ordering.core.domain.model.customer.CustomerId;
 import com.algaworks.algashop.ordering.core.domain.model.product.Product;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -82,6 +85,35 @@ public class ShoppingCartManagementApplicationService implements ForManagingShop
 		ShoppingCart shoppingCart = shoppingCarts.ofId(shoppingCartId)
 				.orElseThrow(()-> new ShoppingCartNotFoundException(rawShoppingCartId));
 		shoppingCarts.remove(shoppingCart);
+	}
+
+	@Override
+	public void changeProductAvailability(UUID productId, boolean available) {
+		List<ShoppingCart> affectedShoppingCarts = shoppingCarts.findAllContainingItem(new ProductId(productId));
+
+		if (affectedShoppingCarts.isEmpty()) {
+			return;
+		}
+
+		affectedShoppingCarts.forEach(shoppingCart -> {
+			shoppingCart.changeItemAvailability(new ProductId(productId), available);
+			shoppingCarts.add(shoppingCart);
+		});
+	}
+
+	@Override
+	public void refreshProductPrice(UUID productId, BigDecimal price) {
+		ProductId domainProductId = new ProductId(productId);
+		List<ShoppingCart> affectedShoppingCarts = shoppingCarts.findAllContainingItem(new ProductId(productId));
+
+		if (affectedShoppingCarts.isEmpty()) {
+			return;
+		}
+
+		affectedShoppingCarts.forEach(shoppingCart -> {
+			shoppingCart.changeItemPrice(domainProductId, new Money(price));
+			shoppingCarts.add(shoppingCart);
+		});
 	}
 
 }

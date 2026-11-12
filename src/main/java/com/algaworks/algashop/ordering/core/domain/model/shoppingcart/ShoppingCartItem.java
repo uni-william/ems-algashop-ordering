@@ -59,9 +59,15 @@ public class ShoppingCartItem {
 		this.recalculateTotals();
 	}
 
-	private void recalculateTotals() {
-		this.setTotalAmount(price.multiply(quantity));
+	void changeAvailability(boolean available) {
+		this.setAvailable(available);
 	}
+
+	public void changeItemPrice(Money price) {
+		this.setPrice(price);
+		this.recalculateTotals();
+	}
+
 
 	public ShoppingCartItemId id() {
 		return id;
@@ -138,6 +144,10 @@ public class ShoppingCartItem {
 		this.totalAmount = totalAmount;
 	}
 
+	private void recalculateTotals() {
+		this.setTotalAmount(price.multiply(quantity));
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -151,4 +161,6 @@ public class ShoppingCartItem {
 		return Objects.hash(id);
 	}
 
+
 }
+
